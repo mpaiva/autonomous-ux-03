@@ -120,6 +120,10 @@ a:hover { color: var(--accent-deep); text-decoration-thickness: 2px; }
 .site-main { flex: 1 0 auto; padding-block: var(--space-7); }
 .site-main:focus { outline: none; }
 
+/* WCAG 2.2 — 2.4.11 Focus Not Obscured: keep targets clear of the sticky header
+   when reached by skip link or in-page anchor. */
+:target, #main, h1[id], h2[id], h3[id], h4[id] { scroll-margin-top: 5rem; }
+
 /* ── Skip link (2.4.1) ─────────────────────────────────────────────────── */
 .skip-link {
   position: absolute; left: var(--space-4); top: -100px;
