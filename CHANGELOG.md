@@ -2,6 +2,15 @@
 
 All notable changes to the operating record. Newest first.
 
+## 2026-05-29 — Backlog & pipeline page (REQ-0003) + 2nd reconciliation pass
+
+- Ran the 2nd memory-reconciliation pass over the decision log (25 candidate
+  entries); top output was a consolidated list of all 5 open Chairman escalations.
+- Created the data-driven Backlog & pipeline page (`/backlog/`, `_data/backlog.yml`)
+  with dependencies + benefits per item, grouped Active / Blocked-on-Chairman /
+  Queued / Open. Promoted reconciliation Section C (escalations) + E (follow-ups)
+  into it. Added Backlog to nav + a dashboard pointer. Logged REQ-0003.
+
 ## 2026-05-29 — Reconciliation candidates reviewed & promoted
 
 - Reviewed the 16 first-pass candidates. Promoted 3 to the authoritative record,

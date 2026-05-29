@@ -1,0 +1,203 @@
+# Pipeline / backlog. Grouped by what is actionable now, what is blocked on a
+# Chairman decision, what is queued next, and open questions. Each item lists its
+# dependencies (what must happen first) and benefits (why it matters / what it
+# unlocks). Much of the "blocked" and "open" content was consolidated from the
+# decision-log reconciliation pass (Section C escalations + Section E follow-ups).
+
+groups:
+  - name: "Active now — Phase 1 (Proof)"
+    blurb: "What the team can move on under its own authority, today."
+    items:
+      - title: "Ship Accessible AI Pattern Library v0.1"
+        status: "In progress"
+        status_class: "info"
+        owner: "Iris (craft) + Atlas (structure); Janus gates claims"
+        dependencies: >-
+          Iris drafts the 5 patterns; Atlas's 14-field template (done). Any
+          *conformance* claim about a pattern is blocked on the disability-led
+          panel (below). v0.1 ships as "design intent," not "conformant."
+        benefit: >-
+          Our first reusable IP and the core of the moat. Powers the signature
+          AI Interface Accessibility Review and is publishable for credibility.
+        refs:
+          - { label: "DR-0010", url: "/decisions/pattern-library-v01-scope/" }
+          - { label: "IP roadmap", url: "/ip-roadmap/" }
+
+      - title: "Verify our own site at WCAG 2.2 AA with assistive-technology testing"
+        status: "Targeted, not verified"
+        status_class: "warn"
+        owner: "Janus"
+        dependencies: >-
+          Manual AT testing (screen reader, keyboard, voice). Lighthouse automated
+          checks pass (100), but that covers a fraction of WCAG. Full verification
+          ideally includes disability-led input (panel, below).
+        benefit: >-
+          Authenticity proof — we hold ourselves to the standard we sell. Upgrades
+          our honest claim from "targeted" to "verified."
+        refs:
+          - { label: "Credibility model", url: "/credibility/" }
+
+      - title: "Build AI UX Accessibility Heuristics + Evaluation Scorecard (IP #2)"
+        status: "Designed, not built"
+        status_class: "neutral"
+        owner: "Atlas"
+        dependencies: >-
+          Pattern Library v0.1 underway. Could later be seeded by a reconciliation
+          pass over Janus's accumulated rulings — but only as hypotheses through the
+          gate, never auto-promoted.
+        benefit: >-
+          Differentiates our reviews from commodity audits; turns "good AI UX" into
+          a repeatable, sellable assessment instrument.
+        refs:
+          - { label: "DR-0004", url: "/decisions/ip-first-moat/" }
+
+      - title: "Run the memory-reconciliation probe on higher-yield corpora"
+        status: "Probe live"
+        status_class: "info"
+        owner: "Vesta (operation), Atlas (architecture), Janus (gate)"
+        dependencies: >-
+          None for our own non-client material. Two passes done (briefs, decision
+          log). Next: less-curated corpora (e.g. session transcripts over time).
+          Client material is blocked (see escalations).
+        benefit: >-
+          Keeps the operating record coherent; surfaces contradictions and
+          consolidated views (this backlog came partly from one). Teaches us the
+          inclusive-UX of memory consolidation, feeding a v0.2 IP candidate.
+        refs:
+          - { label: "DR-0013", url: "/decisions/memory-reconciliation-probe/" }
+
+  - name: "Blocked — needs a Chairman decision"
+    blurb: "Legal / financial / ownership / ethical items the team cannot decide. Consolidated from across the decision log."
+    items:
+      - title: "Company name + trademark clearance"
+        status: "Provisional — your call"
+        status_class: "risk"
+        owner: "Chairman (legal); Sol prepares options"
+        dependencies: >-
+          You approve "Penumbra" (or an alternate, e.g. Liminal / Even) AND
+          authorize a trademark search/clearance in the relevant classes.
+        benefit: >-
+          Settles the only non-adopted decision in the record and lets the brand
+          harden. Removes a latent legal risk (an unrelated public company uses
+          "Penumbra").
+        refs:
+          - { label: "DR-0008", url: "/decisions/company-name/" }
+
+      - title: "Fund a paid disability-led validation panel"
+        status: "Highest-leverage blocker"
+        status_class: "risk"
+        owner: "Chairman (funding); Janus defines scope"
+        dependencies: >-
+          Your approval to scope and fund it. It must be real people — we will not
+          simulate it with an agent.
+        benefit: >-
+          Unlocks the fourth accessibility gate (validation by lived experience).
+          Until it exists, NO conformance or lived-experience claim is possible
+          anywhere in the company — so it gates the entire path from "design intent"
+          to anything we can sell as proven.
+        refs:
+          - { label: "DR-0010", url: "/decisions/pattern-library-v01-scope/" }
+          - { label: "DR-0002", url: "/decisions/authenticity-guardrails/" }
+
+      - title: "Managed Dreaming — cost + beta access"
+        status: "Deferred — your call"
+        status_class: "warn"
+        owner: "Chairman (spend); Sol can request beta + cost estimate"
+        dependencies: >-
+          You approve external spend and Managed Agents API beta access. We can
+          request access first so Sol returns a real cost/scope number before you
+          commit.
+        benefit: >-
+          Better infrastructure than our homebrew probe for memory consolidation at
+          scale; the plan is to adopt it, not compete with it.
+        refs:
+          - { label: "DR-0012", url: "/decisions/memory-and-dreaming/" }
+
+      - title: "Client-transcript IP ownership & confidentiality clearance"
+        status: "Barred until cleared"
+        status_class: "warn"
+        owner: "Chairman (legal/ownership)"
+        dependencies: >-
+          Your clearance on who owns the abstraction learned from a client's
+          sessions. No clients yet — this is pre-cleared groundwork, not urgent.
+        benefit: >-
+          Would let us safely turn client work into reusable IP (the compounding
+          loop) without an ownership/confidentiality misstep.
+        refs:
+          - { label: "DR-0012", url: "/decisions/memory-and-dreaming/" }
+
+  - name: "Queued — Phase 2 and beyond"
+    blurb: "Sequenced after Phase 1 proof; some need a prioritization decision."
+    items:
+      - title: "Prioritize v0.2 pattern-library scope"
+        status: "Needs a Sol decision"
+        status_class: "warn"
+        owner: "Sol"
+        dependencies: >-
+          v0.2 now has three candidates with no recorded priority: conversational
+          error/recovery, reduced-motion generative loaders (both DR-0010), and
+          accessible agent-memory & dreaming UX (DR-0012). Needs one decision record.
+        benefit: >-
+          Closes an open scope gap surfaced by the reconciliation pass; sequences
+          the next tranche of IP cleanly instead of letting candidates pile up.
+        refs:
+          - { label: "DR-0010", url: "/decisions/pattern-library-v01-scope/" }
+          - { label: "DR-0012", url: "/decisions/memory-and-dreaming/" }
+
+      - title: "Inclusive AI Interaction Guidelines (publishable) — IP #3"
+        status: "Planned"
+        status_class: "neutral"
+        owner: "Atlas + Iris"
+        dependencies: "Heuristics/scorecard (IP #2) far enough along to cite."
+        benefit: "Citable point of view; inbound credibility; establishes us as the source."
+        refs:
+          - { label: "IP roadmap", url: "/ip-roadmap/" }
+
+      - title: "Design-system accessibility hardening method — IP #4"
+        status: "Planned"
+        status_class: "neutral"
+        owner: "Atlas"
+        dependencies: "Pattern library + heuristics established."
+        benefit: "Directly productizes a recurring, high-value service line."
+        refs:
+          - { label: "IP roadmap", url: "/ip-roadmap/" }
+
+      - title: "Recruit human accessibility expertise (the human-accountable roles)"
+        status: "Planned — Phase 1/2"
+        status_class: "neutral"
+        owner: "Sol + Chairman (hiring is a spend decision)"
+        dependencies: >-
+          Overlaps the disability-led panel funding. Hiring named human experts is
+          a financial decision that escalates to the Chairman.
+        benefit: >-
+          Makes the human-accountable roles real, not aspirational — required before
+          we can sign off external claims authentically.
+        refs:
+          - { label: "Team & operating model", url: "/team/" }
+
+  - name: "Open questions"
+    blurb: "Unresolved items tracked openly rather than glossed over."
+    items:
+      - title: "The 'second company' reference"
+        status: "Awaiting Chairman context"
+        status_class: "warn"
+        owner: "Chairman"
+        dependencies: "Your context on the first AI-native design company (if any)."
+        benefit: >-
+          Tells us whether this company should relate to, learn from, or stay
+          independent of a prior effort.
+        refs:
+          - { label: "REQ-0001", url: "/chairman-log/founding-mandate/" }
+
+      - title: "Periodic re-check of regulatory dates behind DR-0006"
+        status: "Monitor"
+        status_class: "neutral"
+        owner: "Vesta"
+        dependencies: >-
+          Dated regulatory facts (HHS §504, EAA, ADA Title II, EU AI Act) live in
+          the briefs; some are in flux. Re-confirm before external use.
+        benefit: >-
+          Keeps the target-customer urgency claims honest as deadlines move (they
+          have already shifted once).
+        refs:
+          - { label: "DR-0006", url: "/decisions/target-customers/" }
