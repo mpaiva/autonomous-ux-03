@@ -1,0 +1,20 @@
+---
+layout: page
+title: "Updates"
+permalink: /updates/
+summary: "Periodic operating memos for the Chairman — what progressed, what we learned, what changed, and what is next."
+---
+<ul class="list">
+  {%- assign items = site.updates | sort: "date" | reverse -%}
+  {%- for u in items -%}
+  <li class="list__item">
+    <div class="list__primary">
+      <h3><a href="{{ u.url | relative_url }}">{{ u.title }}</a></h3>
+      {%- if u.summary %}<p>{{ u.summary }}</p>{% endif -%}
+    </div>
+    <div class="list__aside">
+      {%- if u.date %}<span class="list__date">{{ u.date | date: "%Y-%m-%d" }}</span>{% endif -%}
+    </div>
+  </li>
+  {%- endfor -%}
+</ul>

@@ -1,0 +1,24 @@
+# Primary navigation for the operating-record site.
+# Order here is the order rendered in the header and footer.
+- title: "Dashboard"
+  url: /
+- title: "Thesis"
+  url: /thesis/
+- title: "Team"
+  url: /team/
+- title: "Services"
+  url: /services/
+- title: "IP roadmap"
+  url: /ip-roadmap/
+- title: "Credibility"
+  url: /credibility/
+- title: "Decisions"
+  url: /decisions/
+- title: "Research"
+  url: /research/
+- title: "Updates"
+  url: /updates/
+- title: "Risks"
+  url: /risks/
+- title: "Chairman log"
+  url: /chairman-log/

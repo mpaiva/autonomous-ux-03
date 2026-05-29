@@ -1,0 +1,6 @@
+# Top-of-dashboard status. Update this whenever the company state changes.
+phase: "Phase 0 — Formation"
+phase_detail: "Founding team self-organized; thesis validated against market research; operating record stood up. Pre-revenue."
+as_of: "2026-05-29"
+next_milestone: "Phase 1 — Proof: ship the first reusable IP (Accessible AI Pattern Library v0.1) and validate this site at WCAG 2.2 AA with assistive-technology testing."
+headline: "Thesis adopted: Accessible AI UX as a craft standard. Defensibility depends on building proprietary IP and a disability-led design panel — both now the top priorities."

@@ -1,0 +1,37 @@
+# Service model, organized as a ladder: land with productized offers, expand
+# into premium project work, retain with recurring revenue. "recurring: true"
+# marks the annuity lines we are optimizing for.
+
+tiers:
+  - name: "Core — premium AI product design"
+    intent: "The flagship. High-craft AI/agentic product design, inclusive by default."
+    model: "Project / embedded team"
+    recurring: false
+    offers:
+      - "End-to-end design of AI-native products (chat, agents, copilots, generative features)"
+      - "AI interaction strategy and agentic UX patterns (oversight, recovery, trust, failure states)"
+      - "Inclusive-by-default design — accessibility built in from the first wireframe, not bolted on"
+      - "Design-system creation for AI products"
+
+  - name: "Recurring — accessibility as craft (the annuity)"
+    intent: "Where margin compounds. Sold on the client's own ship cadence."
+    model: "Retainer / subscription"
+    recurring: true
+    offers:
+      - "Embedded accessibility design reviews (shift-left, per sprint) — highest-margin, stickiest touchpoint"
+      - "Per-release VPAT / ACR refresh (an ACR is only valid for the version it tested)"
+      - "Accessibility monitoring and governance"
+      - "Design-system accessibility maintenance"
+      - "Accessibility enablement for startup product teams"
+
+  - name: "Productized — fixed scope, fast to buy"
+    intent: "The land motion. Clear scope, clear price, produces the finding that justifies more."
+    model: "Fixed-scope package"
+    recurring: false
+    offers:
+      - "AI Interface Accessibility Review — our signature, category-defining offer (covers what no compliance ruleset does: streaming output, focus management, per-message screen-reader navigation, voice/text parity, AI-disclosure UX)"
+      - "WCAG 2.2 AA conformance audit (scoped)"
+      - "VPAT / ACR generation (WCAG, 508, EU/EN 301 549, INT editions)"
+      - "Remediation sprint"
+      - "Design-system accessibility hardening"
+      - "EU market-entry accessibility package (EAA / EN 301 549)"

@@ -1,0 +1,77 @@
+# Risk register. severity: high | medium | low. Each risk has an owner + mitigation.
+- id: "R-01"
+  title: "Underserved is not the same as defensible"
+  severity: high
+  status: "Active — top priority"
+  detail: >-
+    The 'Accessible AI UX' niche is currently unclaimed, but a pure taste-plus-
+    services position is absorbable: an AI studio could add an accessibility
+    practice, or an accessibility firm could move upstream into design.
+  mitigation: >-
+    Build a proprietary moat fast — pattern library, evaluation scorecards, and a
+    disability-led co-design panel — before incumbents notice the gap.
+  owner: "Design Systems & IP Architect"
+
+- id: "R-02"
+  title: "Authenticity collapse — claiming before it is real"
+  severity: high
+  status: "Controlled by process"
+  detail: >-
+    Our entire premium rests on accessibility being genuinely delivered. Any
+    untested or overstated conformance claim destroys the differentiator.
+  mitigation: >-
+    Accessibility Principal holds a hard veto on all claims. Claims ladder
+    separates 'what we have' from 'what we are building'. No overlays; no
+    automated-only conformance claims.
+  owner: "Accessibility Principal"
+
+- id: "R-03"
+  title: "AI-built founders lack lived credibility"
+  severity: medium
+  status: "Active"
+  detail: >-
+    A studio formed by AI agents claiming inclusive-design authority is a
+    contradiction unless real disabled people and named human experts are
+    accountable for the work.
+  mitigation: >-
+    Human-accountable roles must sign off external claims; stand up the
+    disability-led design panel in Phase 1; never substitute simulation for
+    lived experience.
+  owner: "The Principal"
+
+- id: "R-04"
+  title: "Commoditization / race to per-page audit pricing"
+  severity: medium
+  status: "Mitigated by model"
+  detail: >-
+    Commodity audits trend toward $100–250/page and a price war. Competing there
+    caps pricing and contradicts the premium position.
+  mitigation: >-
+    Bundle accessibility into senior AI product-design engagements and recurring
+    retainers + per-release ACR refreshes, where margin lives. Lead with craft.
+  owner: "The Principal"
+
+- id: "R-05"
+  title: "Regulatory timing shifts"
+  severity: low
+  status: "Monitored"
+  detail: >-
+    Deadlines move (e.g. ADA Title II extended in April 2026 to 2027/2028). Demand
+    timing can slip even when the requirement is locked.
+  mitigation: >-
+    Diversify demand drivers (EAA enforcement, HHS §504 May 2026, EU AI Act
+    transparency, enterprise procurement gates). Sell craft + risk, not a single
+    deadline.
+  owner: "Operations & Research Lead"
+
+- id: "R-06"
+  title: "Founding concentration — single owner / single funder"
+  severity: low
+  status: "Accepted, monitored"
+  detail: >-
+    The Chairman is sole owner and investor. Concentration is a known structural
+    risk for resilience and governance.
+  mitigation: >-
+    Keep burn low and pre-revenue runway honest; build IP that holds value
+    independent of any single engagement. Governance items escalate to Chairman.
+  owner: "The Principal"

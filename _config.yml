@@ -1,0 +1,68 @@
+# ─────────────────────────────────────────────────────────────────────────
+# Operating record for the company. This site is not a marketing brochure;
+# it is the Chairman visibility system and the company's traceable record of
+# decisions, research, progress, and risk.
+# ─────────────────────────────────────────────────────────────────────────
+
+title: "Penumbra"
+tagline: "A premium AI product design studio — inclusive by default."
+# Working name. Trademark clearance is a Chairman/legal escalation (see DR-0008).
+description: >-
+  The operating record of Penumbra, an AI-native design studio building
+  Accessible AI UX as a craft standard — decisions, research, progress, risks,
+  and the Chairman request log, in the open.
+# Set to the production URL once published. Left blank for local builds.
+url: ""
+baseurl: ""
+lang: en
+
+# Build
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+highlighter: rouge
+permalink: pretty
+timezone: America/New_York
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# ── Collections (the operating record) ───────────────────────────────────
+collections:
+  decisions:
+    output: true
+    permalink: /decisions/:slug/
+  prompts:
+    output: true
+    permalink: /chairman-log/:slug/
+  research:
+    output: true
+    permalink: /research/:slug/
+  updates:
+    output: true
+    permalink: /updates/:slug/
+
+# ── Front-matter defaults ────────────────────────────────────────────────
+defaults:
+  - scope: { path: "", type: "decisions" }
+    values: { layout: "decision" }
+  - scope: { path: "", type: "prompts" }
+    values: { layout: "prompt" }
+  - scope: { path: "", type: "research" }
+    values: { layout: "research" }
+  - scope: { path: "", type: "updates" }
+    values: { layout: "update" }
+  - scope: { path: "" }
+    values: { layout: "page" }
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - README.md
+  - .ruby-version
+  - CHANGELOG.md
+  - "*.log"

@@ -1,0 +1,39 @@
+# Progress metrics for the Chairman dashboard.
+# We separate LEADING indicators (things we control now, pre-revenue) from
+# LAGGING indicators (market outcomes). Honest values only — zeros stay zeros.
+
+leading:
+  - label: "Strategic decisions logged"
+    value: "8"
+    note: "Traceable decision records with rationale."
+    status: ok
+  - label: "Research briefs"
+    value: "3"
+    note: "Market, competitive, regulatory — all cited."
+    status: ok
+  - label: "Reusable IP artifacts shipped"
+    value: "0"
+    note: "Pattern library v0.1 is the next milestone."
+    status: warn
+  - label: "Our-own-site WCAG 2.2 AA"
+    value: "Not yet verified"
+    note: "Targeted in build; AT + audit verification pending. We will not claim conformance until tested."
+    status: warn
+  - label: "Disability-led design panel"
+    value: "Not established"
+    note: "Required for authenticity. Recruiting is a Phase 1 priority."
+    status: risk
+
+lagging:
+  - label: "Paying engagements"
+    value: "0"
+    note: "Pre-revenue by design — Phase 0 is formation."
+    status: neutral
+  - label: "Recurring revenue (MRR)"
+    value: "$0"
+    note: "Retainer + per-release ACR model defined; not yet sold."
+    status: neutral
+  - label: "Active retainers"
+    value: "0"
+    note: "Target offer designed (see Services)."
+    status: neutral

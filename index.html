@@ -1,0 +1,133 @@
+---
+layout: default
+title: "Operating dashboard"
+description: "Chairman visibility dashboard for Penumbra — thesis, status, decisions, research, risks, and progress for an Accessible AI UX studio built in the open."
+---
+<section class="hero">
+  <div class="container">
+    <p class="hero__eyebrow">Operating record · Chairman visibility system</p>
+    <h1 class="hero__title">A premium AI product design studio. Inclusive by default.</h1>
+    <p class="hero__lede">{{ site.tagline }} This site is the company's living operating record — every decision, research finding, risk, and Chairman request, in the open and traceable.</p>
+  </div>
+</section>
+
+<div class="container">
+
+  <!-- Status banner -->
+  <section class="section" aria-labelledby="status-h" style="margin-top:0">
+    <div class="card callout--accent" style="border-radius:var(--radius-lg)">
+      <h2 id="status-h" class="card__kicker">Where things stand · as of {{ site.data.status.as_of }}</h2>
+      <p class="card__title" style="margin-bottom:var(--space-2)">{{ site.data.status.phase }}</p>
+      <p class="mt-0">{{ site.data.status.headline }}</p>
+      <p class="text-soft"><strong>Next milestone:</strong> {{ site.data.status.next_milestone }}</p>
+    </div>
+  </section>
+
+  <!-- Leading metrics -->
+  <section class="section" aria-labelledby="metrics-h">
+    <div class="section__head">
+      <h2 id="metrics-h" class="section__title">Progress at a glance</h2>
+      <p class="text-faint mt-0">Leading indicators — what we control pre-revenue.</p>
+    </div>
+    <div class="grid grid--3">
+      {%- for m in site.data.metrics.leading -%}
+      <div class="card metric">
+        <span class="metric__value">{{ m.value }}</span>
+        <span class="metric__label">{{ m.label }}</span>
+        <p style="margin-top:var(--space-3)"><span class="badge badge--{{ m.status }}">{{ m.status }}</span></p>
+        <p class="text-faint" style="font-size:var(--step--1)">{{ m.note }}</p>
+      </div>
+      {%- endfor -%}
+    </div>
+    <p class="text-faint" style="margin-top:var(--space-4)">
+      Market outcomes (revenue, retainers) are all at zero — Phase 0 is formation, pre-revenue by design.
+      See <a href="{{ '/updates/' | relative_url }}">Updates</a> for the full picture.
+    </p>
+  </section>
+
+  <!-- The thesis, short -->
+  <section class="section" aria-labelledby="thesis-h">
+    <div class="section__head">
+      <h2 id="thesis-h" class="section__title">The thesis</h2>
+      <a class="section__more" href="{{ '/thesis/' | relative_url }}">Full thesis &rarr;</a>
+    </div>
+    <div class="grid grid--3">
+      <div class="card">
+        <p class="card__kicker">The wedge</p>
+        <p class="card__title">Accessible AI UX</p>
+        <p>AI interaction design meets inclusive design. Underserved, unclaimed by any named brand, and credible for us to own — <em>if</em> we build the moat.</p>
+      </div>
+      <div class="card">
+        <p class="card__kicker">The position</p>
+        <p class="card__title">Proof of quality, not compliance</p>
+        <p>A top-tier AI product design studio whose work is inclusive by default. Accessibility is evidence of rigor, trust, and enterprise readiness — never a side service.</p>
+      </div>
+      <div class="card">
+        <p class="card__kicker">The caveat</p>
+        <p class="card__title">Do it for real</p>
+        <p>The advantage evaporates if the work is not genuinely tested, documented, and delivered. We claim only what we can prove. <a href="{{ '/credibility/' | relative_url }}">Our credibility model &rarr;</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest decisions -->
+  <section class="section" aria-labelledby="dec-h">
+    <div class="section__head">
+      <h2 id="dec-h" class="section__title">Latest decisions</h2>
+      <a class="section__more" href="{{ '/decisions/' | relative_url }}">All decisions &rarr;</a>
+    </div>
+    <ul class="list">
+      {%- assign decs = site.decisions | sort: "id_code" | reverse -%}
+      {%- for d in decs limit: 5 -%}
+      <li class="list__item">
+        <div class="list__primary">
+          <h3><a href="{{ d.url | relative_url }}">{{ d.title }}</a></h3>
+          {%- if d.decision %}<p>{{ d.decision | truncate: 160 }}</p>{% endif -%}
+        </div>
+        <div class="list__aside">
+          <span class="list__date">{{ d.id_code }}</span>
+          {%- if d.status %}<span class="badge badge--{{ d.status_class | default: 'info' }}">{{ d.status }}</span>{% endif -%}
+        </div>
+      </li>
+      {%- endfor -%}
+    </ul>
+  </section>
+
+  <!-- Top risks -->
+  <section class="section" aria-labelledby="risk-h">
+    <div class="section__head">
+      <h2 id="risk-h" class="section__title">Top risks we are managing</h2>
+      <a class="section__more" href="{{ '/risks/' | relative_url }}">Full risk register &rarr;</a>
+    </div>
+    <ul class="list">
+      {%- for r in site.data.risks -%}
+        {%- if r.severity == "high" -%}
+        <li class="list__item">
+          <div class="list__primary">
+            <h3>{{ r.title }}</h3>
+            <p>{{ r.mitigation }}</p>
+          </div>
+          <div class="list__aside">
+            <span class="badge badge--risk">{{ r.severity }} severity</span>
+            <span class="list__date">{{ r.id }}</span>
+          </div>
+        </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </section>
+
+  <!-- How to read this site -->
+  <section class="section" aria-labelledby="read-h">
+    <div class="section__head">
+      <h2 id="read-h" class="section__title">How to read this operating record</h2>
+    </div>
+    <div class="grid grid--4">
+      <div class="card"><p class="card__title">Decisions</p><p>What we decided and <em>why</em>, with rationale and trade-offs.</p><a class="card__link" href="{{ '/decisions/' | relative_url }}">Open &rarr;</a></div>
+      <div class="card"><p class="card__title">Research</p><p>The cited evidence base behind every strategic call.</p><a class="card__link" href="{{ '/research/' | relative_url }}">Open &rarr;</a></div>
+      <div class="card"><p class="card__title">Updates</p><p>Periodic Chairman memos — progress, learning, what's next.</p><a class="card__link" href="{{ '/updates/' | relative_url }}">Open &rarr;</a></div>
+      <div class="card"><p class="card__title">Chairman log</p><p>Every Chairman request, verbatim, with how it influenced the company.</p><a class="card__link" href="{{ '/chairman-log/' | relative_url }}">Open &rarr;</a></div>
+    </div>
+  </section>
+
+</div>

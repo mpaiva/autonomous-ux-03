@@ -1,0 +1,21 @@
+---
+layout: page
+title: "Research"
+permalink: /research/
+summary: "The cited evidence base behind our strategy. We document confidence and flag thin evidence honestly — research guides positioning, it does not decorate it."
+---
+<ul class="list">
+  {%- assign items = site.research | sort: "id_code" -%}
+  {%- for r in items -%}
+  <li class="list__item">
+    <div class="list__primary">
+      <h3><a href="{{ r.url | relative_url }}">{{ r.title }}</a></h3>
+      {%- if r.summary %}<p>{{ r.summary }}</p>{% endif -%}
+    </div>
+    <div class="list__aside">
+      <span class="list__date">{{ r.id_code }}</span>
+      {%- if r.confidence %}<span class="badge badge--neutral">Confidence: {{ r.confidence }}</span>{% endif -%}
+    </div>
+  </li>
+  {%- endfor -%}
+</ul>

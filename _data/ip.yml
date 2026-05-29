@@ -1,0 +1,51 @@
+# Reusable IP roadmap — the moat. Sequenced by leverage: build first the assets
+# that (a) sit in the white space no one owns, (b) power the productized offers,
+# and (c) are publishable for credibility.
+
+- order: 1
+  name: "Accessible AI Pattern Library v0.1"
+  status: "Next milestone"
+  status_class: "warn"
+  what: >-
+    Accessible interaction patterns for the surfaces that break conventional WCAG
+    assumptions: streaming/generative output, agentic 'acting on your behalf'
+    states, per-message screen-reader navigation, conversational focus management,
+    voice/text parity, and AI-disclosure UX.
+  why_first: >-
+    This is the unclaimed white space. Compliance tooling does not cover it, and
+    the mainstream design field is not even naming it. It powers our signature
+    'AI Interface Accessibility Review' and is publishable.
+
+- order: 2
+  name: "AI UX Accessibility Heuristics + Evaluation Scorecard"
+  status: "Designed, not built"
+  status_class: "neutral"
+  what: >-
+    A scoring rubric to evaluate AI-powered interfaces for inclusive quality —
+    the thing no existing compliance ruleset provides.
+  why_first: >-
+    Turns subjective 'good AI UX' into a defensible, repeatable assessment we can
+    sell and that differentiates our reviews from commodity audits.
+
+- order: 3
+  name: "Inclusive AI Interaction Guidelines (publishable)"
+  status: "Planned"
+  status_class: "neutral"
+  what: >-
+    A citable point of view that commercializes the academic thinking (disability
+    interaction, natively-adaptive interfaces) before incumbents do.
+  why_first: "Credibility and inbound demand; establishes us as the source."
+
+- order: 4
+  name: "Design-System Accessibility Hardening Method"
+  status: "Planned"
+  status_class: "neutral"
+  what: "A repeatable method + checker for making component libraries accessible by default."
+  why_first: "Directly productizes a recurring, high-value service line."
+
+- order: 5
+  name: "Agentic accessibility review workflows + tooling"
+  status: "Later"
+  status_class: "neutral"
+  what: "Semi-automated review workflows and prompt patterns for inclusive AI content/workflows."
+  why_first: "Scales delivery margin once the human-defined standard is proven."

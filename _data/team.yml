@@ -1,0 +1,58 @@
+# Founding team — founder-agents. Roles emerged from company needs, not a
+# predefined org chart. "Human-accountable" marks roles that, for credibility,
+# MUST be held or signed off by a named human expert before any external claim.
+
+- role: "The Principal"
+  function: "Strategy, positioning, go-to-market, pricing, Chairman relationship"
+  mandate: >-
+    Owns the thesis and commercial direction. Final tie-breaker on strategy
+    (Type-1, hard-to-reverse calls). Single point of contact for the Chairman.
+  decision_rights: "Tie-breaks strategy; approves pricing and positioning."
+  human_accountable: false
+
+- role: "Craft Director — AI Interaction Design"
+  function: "Product design quality; AI / agentic / conversational interaction craft"
+  mandate: >-
+    Holds the 'top-tier product design' bar so the company is never perceived as
+    a compliance vendor. Owns AI interaction patterns (chat, agents, voice,
+    generative output) as design craft.
+  decision_rights: "Owns design quality bar; co-owns the pattern library."
+  human_accountable: true
+
+- role: "Accessibility Principal — Credibility Guardian"
+  function: "Accessibility standard, conformance rigor, authenticity enforcement"
+  mandate: >-
+    Owns the 'do it for real or do not claim it' standard. Holds a HARD VETO over
+    any accessibility claim the company makes externally. No majority can override
+    a claim the Accessibility Principal judges untested or undocumented.
+  decision_rights: "Veto on all accessibility claims and conformance statements."
+  human_accountable: true
+
+- role: "Design Systems & IP Architect"
+  function: "Reusable intellectual property — the moat"
+  mandate: >-
+    Builds the defensible assets: the Accessible AI Pattern Library, evaluation
+    scorecards, heuristics, and the design-system accessibility hardening method.
+    Turns project learning into reusable, ownable IP.
+  decision_rights: "Owns the IP roadmap and artifact quality."
+  human_accountable: false
+
+- role: "Operations & Research Lead"
+  function: "Evidence base, operating cadence, the operating record, metrics"
+  mandate: >-
+    Keeps the company evidence-driven and the Chairman informed. Owns market
+    research, this operating-record site, the reporting cadence, and progress
+    metrics. Maintains the decision and prompt logs.
+  decision_rights: "Owns research agenda, reporting, and the operating record."
+  human_accountable: false
+
+# Required capability we do NOT yet have — stated honestly (see Credibility model).
+- role: "Disability-led design panel  (to build — Phase 1)"
+  function: "Lived-experience co-design and validation"
+  mandate: >-
+    Disabled co-designers and assistive-technology users embedded in the design
+    process — not just end-stage testers. This is a credibility requirement, not
+    a nicety. NOT yet established; we will not claim lived-experience validation
+    until this capability is real.
+  decision_rights: "Co-design authority on patterns and validation claims."
+  human_accountable: true

@@ -1,0 +1,22 @@
+---
+layout: page
+title: "Decision log"
+permalink: /decisions/
+summary: "Every meaningful decision, with the rationale and trade-offs behind it. This is how the Chairman can trace why the company is what it is."
+---
+<ul class="list">
+  {%- assign decs = site.decisions | sort: "id_code" -%}
+  {%- for d in decs -%}
+  <li class="list__item">
+    <div class="list__primary">
+      <h3><a href="{{ d.url | relative_url }}">{{ d.title }}</a></h3>
+      {%- if d.decision %}<p>{{ d.decision }}</p>{% endif -%}
+    </div>
+    <div class="list__aside">
+      <span class="list__date">{{ d.id_code }}</span>
+      {%- if d.date %}<span class="list__date">{{ d.date | date: "%Y-%m-%d" }}</span>{% endif -%}
+      {%- if d.status %}<span class="badge badge--{{ d.status_class | default: 'info' }}">{{ d.status }}</span>{% endif -%}
+    </div>
+  </li>
+  {%- endfor -%}
+</ul>

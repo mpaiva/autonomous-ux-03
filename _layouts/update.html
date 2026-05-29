@@ -1,0 +1,17 @@
+---
+layout: default
+---
+<article class="record">
+  <header class="record__header">
+    <p class="record__id">{{ page.id_code | default: "PROGRESS UPDATE" }}</p>
+    <h1 class="record__title">{{ page.title }}</h1>
+    <div class="record__meta">
+      {%- if page.date %}<span><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%Y-%m-%d" }}</time></span>{% endif -%}
+      {%- if page.author %}<span>{{ page.author }}</span>{% endif -%}
+    </div>
+    {%- if page.summary %}<p class="page__summary">{{ page.summary }}</p>{% endif -%}
+  </header>
+  <div class="record__body prose">
+    {{ content }}
+  </div>
+</article>

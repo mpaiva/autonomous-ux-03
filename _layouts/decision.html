@@ -1,0 +1,36 @@
+---
+layout: default
+---
+<article class="record">
+  <header class="record__header">
+    <p class="record__id">{{ page.id_code | default: "DECISION" }}
+      {%- if page.status %} · <span class="badge badge--{{ page.status_class | default: 'info' }}">{{ page.status }}</span>{% endif -%}
+    </p>
+    <h1 class="record__title">{{ page.title }}</h1>
+    <div class="record__meta">
+      {%- if page.date %}<span>Decided <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%Y-%m-%d" }}</time></span>{% endif -%}
+      {%- if page.owner %}<span>Owner: {{ page.owner }}</span>{% endif -%}
+      {%- if page.deciders %}<span>Deciders: {{ page.deciders }}</span>{% endif -%}
+    </div>
+  </header>
+
+  {%- if page.decision -%}
+  <div class="callout callout--accent">
+    <p class="callout__title">Decision</p>
+    <p class="mt-0">{{ page.decision }}</p>
+  </div>
+  {%- endif -%}
+
+  <div class="record__body prose">
+    {{ content }}
+  </div>
+
+  {%- if page.related -%}
+  <footer class="record__footer">
+    <h2 class="section__title">Related</h2>
+    <ul>
+      {%- for r in page.related -%}<li><a href="{{ r.url | relative_url }}">{{ r.label }}</a></li>{%- endfor -%}
+    </ul>
+  </footer>
+  {%- endif -%}
+</article>

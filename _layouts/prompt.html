@@ -1,0 +1,18 @@
+---
+layout: default
+---
+<article class="record">
+  <header class="record__header">
+    <p class="record__id">{{ page.id_code | default: "CHAIRMAN REQUEST" }}
+      {%- if page.status %} · <span class="badge badge--{{ page.status_class | default: 'neutral' }}">{{ page.status }}</span>{% endif -%}
+    </p>
+    <h1 class="record__title">{{ page.title }}</h1>
+    <div class="record__meta">
+      <span>Received: {{ page.received_display | default: page.received }}</span>
+      {%- if page.channel %}<span>Channel: {{ page.channel }}</span>{% endif -%}
+    </div>
+  </header>
+  <div class="record__body prose">
+    {{ content }}
+  </div>
+</article>

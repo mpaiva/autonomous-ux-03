@@ -1,0 +1,24 @@
+<footer class="site-footer">
+  <div class="container">
+    <p class="site-footer__statement">
+      <strong>{{ site.title }}</strong> — {{ site.tagline }}
+    </p>
+    <p class="site-footer__note">
+      This site is the company's operating record and Chairman visibility system.
+      It is built to the standard we sell: it targets
+      <a href="https://www.w3.org/TR/WCAG22/">WCAG 2.2 Level AA</a>. Found a barrier?
+      That is a credibility defect — log it as an issue.
+    </p>
+    <nav class="site-footer__nav" aria-label="Footer">
+      <ul class="site-footer__list">
+        {%- for item in site.data.nav -%}
+          <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+    <p class="site-footer__meta">
+      Operating record · last site build {{ site.time | date: "%Y-%m-%d %H:%M %Z" }}.
+      <a href="{{ '/feed.xml' | relative_url }}">Updates feed</a>.
+    </p>
+  </div>
+</footer>

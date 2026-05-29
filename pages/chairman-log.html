@@ -1,0 +1,21 @@
+---
+layout: page
+title: "Chairman request log"
+permalink: /chairman-log/
+summary: "A permanent, verbatim record of every Chairman request — with our interpretation, the decisions it influenced, actions taken, related artifacts, and current status. The audit trail from instruction to execution."
+---
+<ul class="list">
+  {%- assign items = site.prompts | sort: "id_code" -%}
+  {%- for p in items -%}
+  <li class="list__item">
+    <div class="list__primary">
+      <h3><a href="{{ p.url | relative_url }}">{{ p.title }}</a></h3>
+    </div>
+    <div class="list__aside">
+      <span class="list__date">{{ p.id_code }}</span>
+      {%- if p.received_display %}<span class="list__date">{{ p.received_display }}</span>{% elsif p.received %}<span class="list__date">{{ p.received }}</span>{% endif -%}
+      {%- if p.status %}<span class="badge badge--{{ p.status_class | default: 'neutral' }}">{{ p.status }}</span>{% endif -%}
+    </div>
+  </li>
+  {%- endfor -%}
+</ul>
