@@ -2,6 +2,12 @@
 
 All notable changes to the operating record. Newest first.
 
+## 2026-05-29 — Mission articulated (DR-0011)
+
+- Sol articulated the company mission at the Chairman's request; logged as DR-0011
+  and surfaced on the dashboard. Mission distinguished from the (revisable) thesis.
+- Decisions metric 10 -> 11.
+
 ## 2026-05-29 — Agents made real (Chairman directive REQ-0002)
 
 - Constituted the founding team as five real Claude Code agents in
