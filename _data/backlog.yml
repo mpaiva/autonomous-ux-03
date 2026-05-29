@@ -128,6 +128,20 @@ groups:
         refs:
           - { label: "DR-0012", url: "/decisions/memory-and-dreaming/" }
 
+      - title: "Premium cloud voices for Listen (e.g. OpenAI TTS) — optional upgrade"
+        status: "Deferred — your call"
+        status_class: "warn"
+        owner: "Chairman (spend + infra); Sol/Iris can scaffold the proxy"
+        dependencies: >-
+          The free Web Speech "Listen" feature ships now (DR-0015). Higher-quality
+          cloud voices need a server-side proxy to hold the API key (off GitHub
+          Pages — Cloudflare/Netlify/Vercel) AND a funded OpenAI key (usage spend).
+        benefit: >-
+          More natural, consistent voices than the user's system voices. Nice-to-have,
+          not required — the free version already reads every page.
+        refs:
+          - { label: "DR-0015", url: "/decisions/listen-feature/" }
+
   - name: "Queued — Phase 2 and beyond"
     blurb: "Sequenced after Phase 1 proof; some need a prioritization decision."
     items:

@@ -2,6 +2,17 @@
 
 All notable changes to the operating record. Newest first.
 
+## 2026-05-29 — "Listen" feature on every page (REQ-0007, DR-0015)
+
+- Shipped a "Listen to this page" read-aloud control on every page via the browser
+  Web Speech API (assets/js/listen.js) — no key/server/cost, secure on static
+  hosting, opt-in, keyboard/AT friendly, progressive enhancement. Lighthouse a11y
+  100 with control present.
+- Did NOT embed an OpenAI key client-side (exposed on a static site). Cloud voices
+  deferred to a Chairman decision (proxy + funded key); added to backlog. DR-0015.
+- Fixed a CSS bug found in visual testing (class display overrode [hidden] on the
+  Stop button). Decisions 14 -> 15.
+
 ## 2026-05-29 — Panel operational kit produced (REQ-0006)
 
 - Janus, Vesta, and Sol produced the turnkey operational kit for the panel pilot,

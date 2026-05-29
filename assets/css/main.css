@@ -311,6 +311,26 @@ a:hover { color: var(--accent-deep); text-decoration-thickness: 2px; }
 .callout--warn { background: var(--warn-bg); border-color: var(--warn-line); }
 .callout__title { font-weight: 700; margin: 0 0 var(--space-2); display: flex; align-items: center; gap: var(--space-2); }
 
+/* ── Listen control (progressive enhancement; injected by listen.js) ───── */
+.listen {
+  display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;
+  margin-bottom: var(--space-6);
+}
+.listen__btn {
+  display: inline-flex; align-items: center; gap: .45em;
+  font: inherit; font-size: var(--step--1); font-weight: 600; line-height: 1.2;
+  padding: var(--space-2) var(--space-4); min-height: 44px;
+  border: 1px solid var(--line-strong); border-radius: 999px;
+  background: var(--surface); color: var(--ink); cursor: pointer;
+}
+.listen__btn[hidden] { display: none; }  /* class display would otherwise override the UA [hidden] rule */
+.listen__btn:hover { background: var(--surface-2); border-color: var(--accent); color: var(--accent-deep); }
+.listen__btn--play[aria-pressed="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+@media (prefers-color-scheme: dark) {
+  .listen__btn--play[aria-pressed="true"] { color: #06120f; }
+}
+.listen__status { font-size: var(--step--1); color: var(--ink-faint); }
+
 /* ── Utilities ─────────────────────────────────────────────────────────── */
 .lede { font-size: var(--step-1); color: var(--ink-soft); max-width: var(--measure); }
 .text-soft { color: var(--ink-soft); }
