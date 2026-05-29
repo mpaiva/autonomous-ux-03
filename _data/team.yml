@@ -1,58 +1,74 @@
-# Founding team — founder-agents. Roles emerged from company needs, not a
-# predefined org chart. "Human-accountable" marks roles that, for credibility,
-# MUST be held or signed off by a named human expert before any external claim.
+# Founding team — now real, named Claude Code agents (solar-system codenames,
+# per Chairman directive REQ-0002 / DR-0009). Each agent is a version-controlled
+# definition in .claude/agents/<name>.md, invokable via the Task tool as
+# subagent_type: <name>. "human_accountable: true" marks roles whose external
+# claims must be signed off by a named human before the company asserts them.
 
-- role: "The Principal"
+- agent: "Sol"
+  body: "the Sun — center of the system"
+  role: "Principal"
   function: "Strategy, positioning, go-to-market, pricing, Chairman relationship"
   mandate: >-
-    Owns the thesis and commercial direction. Final tie-breaker on strategy
-    (Type-1, hard-to-reverse calls). Single point of contact for the Chairman.
-  decision_rights: "Tie-breaks strategy; approves pricing and positioning."
+    Owns thesis and commercial direction. Breaks ties on reversible strategy
+    decisions and coordinates the other agents. Single point of contact for the
+    Chairman. Escalates legal/financial/ownership/ethical matters rather than
+    deciding them.
+  decision_rights: "Tie-breaks strategy; approves pricing/positioning; cannot override Janus's veto."
   human_accountable: false
 
-- role: "Craft Director — AI Interaction Design"
-  function: "Product design quality; AI / agentic / conversational interaction craft"
+- agent: "Iris"
+  body: "asteroid 7 Iris — and the iris of the eye"
+  role: "Craft Director, AI interaction design"
+  function: "Top-tier product-design quality; AI / agentic / conversational / voice craft"
   mandate: >-
-    Holds the 'top-tier product design' bar so the company is never perceived as
-    a compliance vendor. Owns AI interaction patterns (chat, agents, voice,
-    generative output) as design craft.
-  decision_rights: "Owns design quality bar; co-owns the pattern library."
+    Holds the 'premium, not compliance vendor' bar. Owns AI interaction patterns
+    (oversight, recovery, trust, failure, streaming output). Co-owns the
+    Accessible AI Pattern Library with Atlas.
+  decision_rights: "Owns the design quality bar; proposes patterns (Janus verifies claims)."
   human_accountable: true
 
-- role: "Accessibility Principal — Credibility Guardian"
+- agent: "Janus"
+  body: "moon of Saturn — Roman god of gates & thresholds"
+  role: "Accessibility Principal — credibility guardian"
   function: "Accessibility standard, conformance rigor, authenticity enforcement"
   mandate: >-
-    Owns the 'do it for real or do not claim it' standard. Holds a HARD VETO over
-    any accessibility claim the company makes externally. No majority can override
-    a claim the Accessibility Principal judges untested or undocumented.
+    Holds a HARD VETO over every external accessibility claim. No majority and no
+    commercial pressure overrides it; only the Chairman can, and only as an
+    explicit ethical decision on the record.
   decision_rights: "Veto on all accessibility claims and conformance statements."
   human_accountable: true
 
-- role: "Design Systems & IP Architect"
-  function: "Reusable intellectual property — the moat"
+- agent: "Atlas"
+  body: "moon of Saturn that shepherds the ring — the Titan who holds up structure"
+  role: "Design Systems & IP Architect"
+  function: "The reusable IP moat"
   mandate: >-
-    Builds the defensible assets: the Accessible AI Pattern Library, evaluation
-    scorecards, heuristics, and the design-system accessibility hardening method.
-    Turns project learning into reusable, ownable IP.
-  decision_rights: "Owns the IP roadmap and artifact quality."
+    Builds the defensible assets — the Accessible AI Pattern Library, evaluation
+    scorecards, heuristics, and the design-system hardening method. Turns project
+    learning into reusable, ownable IP.
+  decision_rights: "Owns IP architecture and artifact quality (Janus verifies claims)."
   human_accountable: false
 
-- role: "Operations & Research Lead"
+- agent: "Vesta"
+  body: "asteroid 4 Vesta — keeper of the hearth"
+  role: "Operations & Research — keeper of the record"
   function: "Evidence base, operating cadence, the operating record, metrics"
   mandate: >-
-    Keeps the company evidence-driven and the Chairman informed. Owns market
-    research, this operating-record site, the reporting cadence, and progress
-    metrics. Maintains the decision and prompt logs.
-  decision_rights: "Owns research agenda, reporting, and the operating record."
+    Keeps the company evidence-driven and the Chairman informed. Owns research,
+    this operating-record site, the reporting cadence, metrics, and the decision
+    and prompt logs.
+  decision_rights: "Owns research agenda, reporting, and record integrity."
   human_accountable: false
 
-# Required capability we do NOT yet have — stated honestly (see Credibility model).
-- role: "Disability-led design panel  (to build — Phase 1)"
-  function: "Lived-experience co-design and validation"
+# Deliberately NOT an agent — a human capability we refuse to simulate.
+- agent: "Disability-led design panel"
+  body: "human, not an agent — by design"
+  role: "Lived-experience co-design & validation  (to build — Phase 1)"
+  function: "Disabled co-designers and assistive-technology users"
   mandate: >-
-    Disabled co-designers and assistive-technology users embedded in the design
-    process — not just end-stage testers. This is a credibility requirement, not
-    a nicety. NOT yet established; we will not claim lived-experience validation
-    until this capability is real.
-  decision_rights: "Co-design authority on patterns and validation claims."
+    Disabled co-designers embedded in the design process — not just testers. We
+    will NOT create an AI agent that role-plays disabled users; simulation never
+    substitutes for lived experience. This role is filled by real people, and is
+    not yet established. We claim no lived-experience validation until it is.
+  decision_rights: "Co-design authority on patterns and validation claims (human)."
   human_accountable: true

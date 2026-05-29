@@ -4,8 +4,12 @@
 
 leading:
   - label: "Strategic decisions logged"
-    value: "8"
+    value: "10"
     note: "Traceable decision records with rationale."
+    status: ok
+  - label: "Founding agents (real, named)"
+    value: "5"
+    note: "Sol, Iris, Janus, Atlas, Vesta — version-controlled in .claude/agents/. Panel stays human."
     status: ok
   - label: "Research briefs"
     value: "3"

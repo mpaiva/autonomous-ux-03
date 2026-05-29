@@ -2,6 +2,19 @@
 
 All notable changes to the operating record. Newest first.
 
+## 2026-05-29 — Agents made real (Chairman directive REQ-0002)
+
+- Constituted the founding team as five real Claude Code agents in
+  `.claude/agents/` — Sol, Iris, Janus, Atlas, Vesta (solar-system codenames,
+  DR-0009). Disability-led panel deliberately kept human, not an agent.
+- Agents ran their first real deliberation; Sol synthesized it into DR-0010
+  (Pattern Library v0.1 scope). Logged as UPD-002.
+- Rewrote the Team page with an honest account of what the agents are/are not.
+- Logged REQ-0002 verbatim. Escalated to Chairman: funding a disability-led
+  validation panel.
+- Fixed earlier defect: stylesheet was served as HTML (catch-all layout default);
+  removed front matter so CSS serves verbatim.
+
 ## 2026-05-29 — Published (Chairman-approved)
 
 - Chairman approved publishing. Created public repo `mpaiva/autonomous-ux-03`,
