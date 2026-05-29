@@ -36,3 +36,13 @@ we cannot defend would be both a commercial mistake and an authenticity violatio
 - Slower to present concrete prices publicly; intentional.
 - Creates a research dependency: gather competitor proposals / RFP award data
   before formalizing pricing.
+
+## Evidence note (promoted 2026-05-29 from the memory-reconciliation review, DR-0013)
+
+The reconciliation pass surfaced a finding neither research brief states on its own:
+our own two briefs give **non-overlapping audit price ranges for the same service
+tiers** (RB-01 mid-site ~$5k–$25k vs RB-03 small/mid $1,500–$5,500; RB-01 enterprise
+$75k+ vs RB-03 enterprise $15k–$50k+). The only pricing line the briefs agree on is
+~$100–$250/page. This inter-source disagreement directly reinforces this decision —
+**no audit price should be anchored from current material.** (Underlying figures are
+Low-confidence/vendor-listed; the *observation that they disagree* is solid.)

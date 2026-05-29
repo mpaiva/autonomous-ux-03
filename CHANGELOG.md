@@ -2,6 +2,14 @@
 
 All notable changes to the operating record. Newest first.
 
+## 2026-05-29 — Reconciliation candidates reviewed & promoted
+
+- Reviewed the 16 first-pass candidates. Promoted 3 to the authoritative record,
+  each labeled with confidence + provenance: audit-price contradiction → DR-0005;
+  recurring-revenue-from-three-angles (Med) → DR-0003; craft-gap = regulatory-seam
+  (Med) → DR-0001. Rest kept as candidate / already recorded. Disposition logged in
+  DR-0013; candidate file marked reviewed (stays non-authoritative).
+
 ## 2026-05-29 — Memory-reconciliation probe built & run (DR-0013)
 
 - Chairman greenlit building our own consolidation probe (working name "memory

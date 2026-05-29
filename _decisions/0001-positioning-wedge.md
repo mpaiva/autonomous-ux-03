@@ -55,6 +55,15 @@ generative, agentic, and voice interfaces.
   [DR-0004]({{ '/decisions/ip-first-moat/' | relative_url }}) (build the IP moat)
   and the [credibility model]({{ '/credibility/' | relative_url }}).
 
+## Supporting synthesis (promoted 2026-05-29 from the memory-reconciliation review, DR-0013)
+
+*Medium confidence — a cross-brief hypothesis, not a finding.* The craft gap and the
+regulatory seam point at the **same target**: the new AI interaction patterns that
+break existing WCAG focus/status-message expectations (generative, streaming,
+agentic, voice) are exactly the surfaces the EU AI Act's accessibility × transparency
+obligations will touch. Where we have the sharpest craft advantage is also where a
+regulatory driver is forming — which strengthens this wedge.
+
 ## Status
 
 Adopted as the founding position. Revisit if an incumbent credibly claims the

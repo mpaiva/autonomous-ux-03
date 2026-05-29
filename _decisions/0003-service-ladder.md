@@ -44,3 +44,12 @@ page):
 - Productized audits risk pulling us toward commodity perception; we mitigate by
   always tying them upward to design and retainers (see
   [DR-0005]({{ '/decisions/pricing-posture/' | relative_url }})).
+
+## Supporting synthesis (promoted 2026-05-29 from the memory-reconciliation review, DR-0013)
+
+*Medium confidence — a cross-brief hypothesis, not a finding.* A recurring-revenue
+model is supported from **three angles at once**: accessibility incumbents pair
+SaaS/subscription with services (competitive), an ACR is only valid for the version
+it tested so it regenerates per release (regulatory), and design retainers are the
+premium analogue (pricing). No single research brief states this convergence; it
+strengthens the case for optimizing toward the recurring tier.
