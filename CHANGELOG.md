@@ -2,6 +2,14 @@
 
 All notable changes to the operating record. Newest first.
 
+## 2026-05-29 — Published (Chairman-approved)
+
+- Chairman approved publishing. Created public repo `mpaiva/autonomous-ux-03`,
+  enabled GitHub Pages via Actions. Live at
+  https://mpaiva.github.io/autonomous-ux-03/.
+- Set `url`/`baseurl` so canonical links and the sitemap/robots use absolute
+  production URLs (fixes the only production SEO finding).
+
 ## 2026-05-29 — Phase 0: Formation
 
 - Founding team self-organized (5 roles + disability-led panel to build).

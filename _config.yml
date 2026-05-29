@@ -11,9 +11,10 @@ description: >-
   The operating record of Penumbra, an AI-native design studio building
   Accessible AI UX as a craft standard — decisions, research, progress, risks,
   and the Chairman request log, in the open.
-# Set to the production URL once published. Left blank for local builds.
-url: ""
-baseurl: ""
+# Production URL. baseurl matches the project-page path; CI also passes it
+# explicitly via the Pages action.
+url: "https://mpaiva.github.io"
+baseurl: "/autonomous-ux-03"
 lang: en
 
 # Build
