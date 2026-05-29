@@ -13,15 +13,16 @@ groups:
         status_class: "ok"
         owner: "Sol (coordinate), Janus (scope/gate), Vesta (record); humans hire/pay"
         dependencies: >-
-          Chairman approved Option A + $25k envelope (DR-0014). Next: the agents
-          prepare the operational kit (recruitment brief, co-design + validation
-          protocol, consent + fair-pay schedule, platform evaluation with real
-          quotes). Actual hiring/contracts/payment are real-world human steps.
+          Chairman approved Option A + $25k envelope (DR-0014). Operational kit is
+          DONE (recruitment brief, coverage, validation protocol, fair-pay, consent,
+          platform evaluation). Next real-world step: humans recruit/contract/pay
+          the co-designers and get real platform quotes (Fable ~$3,750 published).
         benefit: >-
           Unlocks the fourth accessibility gate (validation by lived experience) —
           the path from "design intent" to provable. First job: validate our own
           site, upgrading credibility from "targeted" to "verified."
         refs:
+          - { label: "Operational kit", url: "/panel/" }
           - { label: "DR-0014", url: "/decisions/fund-panel-pilot/" }
           - { label: "PROP-0001", url: "/proposals/disability-led-validation-panel/" }
 

@@ -2,6 +2,14 @@
 
 All notable changes to the operating record. Newest first.
 
+## 2026-05-29 — Panel operational kit produced (REQ-0006)
+
+- Janus, Vesta, and Sol produced the turnkey operational kit for the panel pilot,
+  assembled on a new page (/panel/): recruitment brief, coverage matrix, validation
+  protocol (4 gates), fair-pay schedule (balanced to $25k), consent template, and a
+  platform evaluation with real quotes (Fable ~$3,750 published). Linked from
+  DR-0014 + backlog. Logged REQ-0006. (Scratch agent files cleaned up.)
+
 ## 2026-05-29 — Panel pilot APPROVED (REQ-0005, DR-0014)
 
 - Chairman approved PROP-0001 Option A: ~$25k disability-led validation panel pilot.

@@ -56,6 +56,8 @@ condition of the pilot, not a variable to cut.
 
 ## Next
 
-The team produces the operational kit (above) so recruitment can begin. The pilot's
+The team has produced the [operational kit]({{ '/panel/' | relative_url }})
+(recruitment brief, coverage matrix, validation protocol, fair-pay schedule, consent
+template, platform evaluation with real quotes) so recruitment can begin. The pilot's
 first deliverable — lived-experience validation of our own site — becomes the proof
 that upgrades our credibility from "targeted" to "verified."
