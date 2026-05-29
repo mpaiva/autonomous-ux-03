@@ -128,18 +128,20 @@ groups:
         refs:
           - { label: "DR-0012", url: "/decisions/memory-and-dreaming/" }
 
-      - title: "Premium cloud voices for Listen (e.g. OpenAI TTS) — optional upgrade"
-        status: "Deferred — your call"
+      - title: "OpenAI voices for Listen (BYOK) — scaffolded; deploy relay to enable"
+        status: "Scaffolded — one-time deploy"
         status_class: "warn"
-        owner: "Chairman (spend + infra); Sol/Iris can scaffold the proxy"
+        owner: "Chairman/human (deploy free Cloudflare Worker + set RELAY_URL)"
         dependencies: >-
-          The free Web Speech "Listen" feature ships now (DR-0015). Higher-quality
-          cloud voices need a server-side proxy to hold the API key (off GitHub
-          Pages — Cloudflare/Netlify/Vercel) AND a funded OpenAI key (usage spend).
+          BYOK client UI + stateless relay are built (DR-0016). No funded key (each
+          listener brings their own). OpenAI blocks browser POST (verified), so the
+          relay is required — but it's free (Cloudflare Workers) and stateless.
+          To enable: deploy proxy/openai-tts-worker.js, set RELAY_URL in listen.js.
         benefit: >-
-          More natural, consistent voices than the user's system voices. Nice-to-have,
-          not required — the free version already reads every page.
+          Higher-quality, consistent voices for those who opt in with their own key.
+          Nice-to-have — the free browser voice already reads every page.
         refs:
+          - { label: "DR-0016", url: "/decisions/byok-openai-voices/" }
           - { label: "DR-0015", url: "/decisions/listen-feature/" }
 
   - name: "Queued — Phase 2 and beyond"

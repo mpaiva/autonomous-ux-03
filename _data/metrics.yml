@@ -4,7 +4,7 @@
 
 leading:
   - label: "Strategic decisions logged"
-    value: "15"
+    value: "16"
     note: "Traceable decision records with rationale."
     status: ok
   - label: "Founding agents (real, named)"

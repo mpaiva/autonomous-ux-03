@@ -2,6 +2,15 @@
 
 All notable changes to the operating record. Newest first.
 
+## 2026-05-29 — OpenAI voices via BYOK scaffolded (REQ-0008, DR-0016)
+
+- Verified OpenAI blocks authenticated browser POST (CORS) — pure client-side BYOK
+  to OpenAI is impossible; a stateless relay is required.
+- Shipped client-side BYOK UI (Voice settings: user enters own key, stored in their
+  browser; engine choice; forget-key; browser-voice fallback). Scaffolded a free,
+  stateless Cloudflare Worker relay (proxy/) that forwards the user's key and never
+  stores it. Enabling = one-time owner deploy + set RELAY_URL. Decisions 15 -> 16.
+
 ## 2026-05-29 — "Listen" feature on every page (REQ-0007, DR-0015)
 
 - Shipped a "Listen to this page" read-aloud control on every page via the browser
