@@ -42,8 +42,9 @@ records with no single view.
 
 <div class="callout callout--accent">
   <p class="callout__title">For the Chairman</p>
-  <p class="mt-0">The four items under <strong>"Blocked — needs a Chairman
-  decision"</strong> are the ones waiting on you. The highest-leverage is
-  <strong>funding the disability-led validation panel</strong> — until it exists, no
-  conformance or lived-experience claim is possible anywhere in the company.</p>
+  <p class="mt-0">The disability-led validation panel pilot — the highest-leverage
+  item — has been <strong>approved</strong> and moved to active work (DR-0014). The
+  items still under <strong>"Blocked — needs a Chairman decision"</strong> are the
+  ones now waiting on you: company name + trademark, managed Dreaming cost/beta, and
+  client-transcript IP ownership.</p>
 </div>

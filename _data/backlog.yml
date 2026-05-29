@@ -8,6 +8,23 @@ groups:
   - name: "Active now — Phase 1 (Proof)"
     blurb: "What the team can move on under its own authority, today."
     items:
+      - title: "Stand up the disability-led validation panel pilot (APPROVED)"
+        status: "Approved — operationalizing"
+        status_class: "ok"
+        owner: "Sol (coordinate), Janus (scope/gate), Vesta (record); humans hire/pay"
+        dependencies: >-
+          Chairman approved Option A + $25k envelope (DR-0014). Next: the agents
+          prepare the operational kit (recruitment brief, co-design + validation
+          protocol, consent + fair-pay schedule, platform evaluation with real
+          quotes). Actual hiring/contracts/payment are real-world human steps.
+        benefit: >-
+          Unlocks the fourth accessibility gate (validation by lived experience) —
+          the path from "design intent" to provable. First job: validate our own
+          site, upgrading credibility from "targeted" to "verified."
+        refs:
+          - { label: "DR-0014", url: "/decisions/fund-panel-pilot/" }
+          - { label: "PROP-0001", url: "/proposals/disability-led-validation-panel/" }
+
       - title: "Ship Accessible AI Pattern Library v0.1"
         status: "In progress"
         status_class: "info"
@@ -82,24 +99,6 @@ groups:
           "Penumbra").
         refs:
           - { label: "DR-0008", url: "/decisions/company-name/" }
-
-      - title: "Fund a paid disability-led validation panel"
-        status: "Proposal ready — awaiting you"
-        status_class: "risk"
-        owner: "Chairman (funding); Sol scoped it"
-        dependencies: >-
-          Decision-ready proposal prepared (PROP-0001): recommends a lean pilot,
-          ~$25k for 3 months. Your approval of the budget envelope + authorization
-          to recruit unblocks it. It must be real people — we will not simulate it.
-        benefit: >-
-          Unlocks the fourth accessibility gate (validation by lived experience).
-          Until it exists, NO conformance or lived-experience claim is possible
-          anywhere in the company — so it gates the entire path from "design intent"
-          to anything we can sell as proven.
-        refs:
-          - { label: "PROP-0001", url: "/proposals/disability-led-validation-panel/" }
-          - { label: "DR-0010", url: "/decisions/pattern-library-v01-scope/" }
-          - { label: "DR-0002", url: "/decisions/authenticity-guardrails/" }
 
       - title: "Managed Dreaming — cost + beta access"
         status: "Deferred — your call"

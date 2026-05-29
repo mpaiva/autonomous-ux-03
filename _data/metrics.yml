@@ -4,7 +4,7 @@
 
 leading:
   - label: "Strategic decisions logged"
-    value: "13"
+    value: "14"
     note: "Traceable decision records with rationale."
     status: ok
   - label: "Founding agents (real, named)"
@@ -24,9 +24,9 @@ leading:
     note: "Targeted in build; AT + audit verification pending. We will not claim conformance until tested."
     status: warn
   - label: "Disability-led design panel"
-    value: "Not established"
-    note: "Required for authenticity. Recruiting is a Phase 1 priority."
-    status: risk
+    value: "Pilot approved"
+    note: "Chairman approved Option A (~$25k pilot, DR-0014). Operational kit + recruitment next; not yet staffed."
+    status: warn
 
 lagging:
   - label: "Paying engagements"

@@ -2,6 +2,13 @@
 
 All notable changes to the operating record. Newest first.
 
+## 2026-05-29 — Panel pilot APPROVED (REQ-0005, DR-0014)
+
+- Chairman approved PROP-0001 Option A: ~$25k disability-led validation panel pilot.
+  Recorded as DR-0014; PROP-0001 flipped to Approved; backlog item moved from
+  "Blocked" to active. Panel metric "Not established" -> "Pilot approved". Decisions
+  13 -> 14. Next: agents prepare the operational kit; humans hire/contract/pay.
+
 ## 2026-05-29 — Disability-led panel proposal (REQ-0004, PROP-0001)
 
 - Sol produced a decision-ready proposal for a paid disability-led validation panel

@@ -2,14 +2,14 @@
 title: "A paid disability-led validation panel"
 slug: disability-led-validation-panel
 id_code: "PROP-0001"
-status: "Awaiting Chairman approval"
-status_class: "warn"
+status: "Approved by Chairman (Option A) — 2026-05-29"
+status_class: "ok"
 date: 2026-05-29
 author: "Sol (Principal)"
 decision_needed: >-
-  Approve a $25k pilot budget envelope + authorization to recruit 2–3 disabled
-  co-designers and engage a panel platform, and to run a pilot whose first job is
-  validating our own site at WCAG 2.2 AA. Recommended: Option A (lean pilot).
+  APPROVED 2026-05-29 — the Chairman authorized Option A as scoped: a ~$25k pilot
+  budget envelope, recruiting 2–3 disabled co-designers + a panel platform, and
+  running the pilot (first job: validate our own site at WCAG 2.2 AA). See DR-0014.
 cost_confidence: >-
   Low–Medium — benchmarked ranges below, not quotes. Verify with real
   vendor/contractor quotes before commitment.

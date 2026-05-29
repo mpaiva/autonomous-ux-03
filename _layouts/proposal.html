@@ -14,11 +14,18 @@ layout: default
   </header>
 
   {%- if page.decision_needed -%}
+  {%- if page.status_class == "ok" -%}
+  <div class="callout callout--accent">
+    <p class="callout__title">Outcome</p>
+    <p class="mt-0">{{ page.decision_needed }}</p>
+  </div>
+  {%- else -%}
   <div class="callout callout--warn">
     <p class="callout__title">Decision needed from the Chairman</p>
     <p class="mt-0">{{ page.decision_needed }}</p>
     {%- if page.cost_confidence %}<p class="text-soft" style="margin-top:var(--space-2)"><strong>Cost confidence:</strong> {{ page.cost_confidence }}</p>{% endif -%}
   </div>
+  {%- endif -%}
   {%- endif -%}
 
   <div class="record__body prose">
