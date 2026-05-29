@@ -2,6 +2,15 @@
 
 All notable changes to the operating record. Newest first.
 
+## 2026-05-29 — Memory-reconciliation probe built & run (DR-0013)
+
+- Chairman greenlit building our own consolidation probe (working name "memory
+  reconciliation", never "Dreaming"). Atlas wrote `.claude/memory-reconciliation-spec.md`;
+  Janus pre-committed the claim boundary + naming + veto condition; Vesta ran the
+  first pass over our research briefs (`.claude/memory/reconciliation-candidates/2026-05-29-research.md`,
+  16 candidate entries) — caught a real price-range contradiction, surfaced one
+  cross-brief synthesis, flagged the unpublished-pricing gap. Decisions 12 -> 13.
+
 ## 2026-05-29 — Memory & Dreaming evaluated (DR-0012)
 
 - Vesta + Atlas independently evaluated adopting Claude's Memory and Dreaming
