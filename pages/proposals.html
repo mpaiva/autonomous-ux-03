@@ -1,0 +1,21 @@
+---
+layout: page
+title: "Proposals"
+permalink: /proposals/
+summary: "Proposals prepared for the Chairman that are awaiting a decision. Distinct from the decision log — these are not yet decided."
+---
+<ul class="list">
+  {%- assign items = site.proposals | sort: "id_code" -%}
+  {%- for p in items -%}
+  <li class="list__item">
+    <div class="list__primary">
+      <h3><a href="{{ p.url | relative_url }}">{{ p.title }}</a></h3>
+      {%- if p.summary %}<p>{{ p.summary }}</p>{% endif -%}
+    </div>
+    <div class="list__aside">
+      <span class="list__date">{{ p.id_code }}</span>
+      {%- if p.status %}<span class="badge badge--{{ p.status_class | default: 'warn' }}">{{ p.status }}</span>{% endif -%}
+    </div>
+  </li>
+  {%- endfor -%}
+</ul>

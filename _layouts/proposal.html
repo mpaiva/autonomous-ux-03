@@ -1,0 +1,27 @@
+---
+layout: default
+---
+<article class="record">
+  <header class="record__header">
+    <p class="record__id">{{ page.id_code | default: "PROPOSAL" }}
+      {%- if page.status %} · <span class="badge badge--{{ page.status_class | default: 'warn' }}">{{ page.status }}</span>{% endif -%}
+    </p>
+    <h1 class="record__title">{{ page.title }}</h1>
+    <div class="record__meta">
+      {%- if page.author %}<span>{{ page.author }}</span>{% endif -%}
+      {%- if page.date %}<span><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%Y-%m-%d" }}</time></span>{% endif -%}
+    </div>
+  </header>
+
+  {%- if page.decision_needed -%}
+  <div class="callout callout--warn">
+    <p class="callout__title">Decision needed from the Chairman</p>
+    <p class="mt-0">{{ page.decision_needed }}</p>
+    {%- if page.cost_confidence %}<p class="text-soft" style="margin-top:var(--space-2)"><strong>Cost confidence:</strong> {{ page.cost_confidence }}</p>{% endif -%}
+  </div>
+  {%- endif -%}
+
+  <div class="record__body prose">
+    {{ content }}
+  </div>
+</article>

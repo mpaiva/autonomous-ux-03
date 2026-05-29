@@ -2,6 +2,14 @@
 
 All notable changes to the operating record. Newest first.
 
+## 2026-05-29 — Disability-led panel proposal (REQ-0004, PROP-0001)
+
+- Sol produced a decision-ready proposal for a paid disability-led validation panel
+  (PROP-0001): recommends a lean pilot (~$25k/3mo), benchmarked cost ranges (flagged),
+  fair pay centered, first job = validate our own site. Awaiting Chairman decision.
+- Added a `proposals` collection + listing + nav entry for awaiting-decision
+  artifacts; backlog item now points to PROP-0001. Logged REQ-0004.
+
 ## 2026-05-29 — Backlog & pipeline page (REQ-0003) + 2nd reconciliation pass
 
 - Ran the 2nd memory-reconciliation pass over the decision log (25 candidate

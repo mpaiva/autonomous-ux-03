@@ -84,18 +84,20 @@ groups:
           - { label: "DR-0008", url: "/decisions/company-name/" }
 
       - title: "Fund a paid disability-led validation panel"
-        status: "Highest-leverage blocker"
+        status: "Proposal ready — awaiting you"
         status_class: "risk"
-        owner: "Chairman (funding); Janus defines scope"
+        owner: "Chairman (funding); Sol scoped it"
         dependencies: >-
-          Your approval to scope and fund it. It must be real people — we will not
-          simulate it with an agent.
+          Decision-ready proposal prepared (PROP-0001): recommends a lean pilot,
+          ~$25k for 3 months. Your approval of the budget envelope + authorization
+          to recruit unblocks it. It must be real people — we will not simulate it.
         benefit: >-
           Unlocks the fourth accessibility gate (validation by lived experience).
           Until it exists, NO conformance or lived-experience claim is possible
           anywhere in the company — so it gates the entire path from "design intent"
           to anything we can sell as proven.
         refs:
+          - { label: "PROP-0001", url: "/proposals/disability-led-validation-panel/" }
           - { label: "DR-0010", url: "/decisions/pattern-library-v01-scope/" }
           - { label: "DR-0002", url: "/decisions/authenticity-guardrails/" }
 
