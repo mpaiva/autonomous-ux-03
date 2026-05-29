@@ -2,6 +2,17 @@
 
 All notable changes to the operating record. Newest first.
 
+## 2026-05-29 — Memory & Dreaming evaluated (DR-0012)
+
+- Vesta + Atlas independently evaluated adopting Claude's Memory and Dreaming
+  features. Adopted: pilot per-agent memory now (conditions enforced); defer
+  Dreaming pending Chairman approval of cost + beta access; add "accessible
+  agent-memory & dreaming UX" as a v0.2 IP candidate.
+- Added `.claude/MEMORY-GOVERNANCE.md` (one-directional authority; provenance;
+  no simulated lived experience; no shadow record). Decisions metric 11 -> 12.
+- Escalated to Chairman: Dreaming cost/beta access; and running dreams over client
+  transcripts (IP-ownership/confidentiality — blocked until cleared).
+
 ## 2026-05-29 — Mission articulated (DR-0011)
 
 - Sol articulated the company mission at the Chairman's request; logged as DR-0011
