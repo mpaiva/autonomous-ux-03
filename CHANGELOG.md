@@ -2,6 +2,13 @@
 
 All notable changes to the operating record. Newest first.
 
+## 2026-05-29 — Key model confirmed: BYOK (REQ-0009)
+
+- Chairman asked about an .env key; confirmed BYOK over a funded key (no key in the
+  public repo/site — it would be exposed). Relay now optionally accepts an encrypted
+  OPENAI_API_KEY secret (local/future use, never in source); .gitignore hardened
+  against key commits; added proxy/.dev.vars.example + wrangler secret docs.
+
 ## 2026-05-29 — OpenAI voices via BYOK scaffolded (REQ-0008, DR-0016)
 
 - Verified OpenAI blocks authenticated browser POST (CORS) — pure client-side BYOK

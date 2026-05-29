@@ -7,3 +7,12 @@ vendor/
 *.gem
 .DS_Store
 *.log
+
+# Secrets — never commit real keys. Templates (*.example) are allowed.
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+proxy/.wrangler/

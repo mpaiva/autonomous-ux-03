@@ -35,7 +35,7 @@ function corsHeaders(origin) {
 }
 
 export default {
-  async fetch(request) {
+  async fetch(request, env) {
     const origin = request.headers.get("Origin") || "";
     const cors = corsHeaders(origin);
 
@@ -46,12 +46,22 @@ export default {
       return new Response("Method Not Allowed", { status: 405, headers: cors });
     }
 
-    const auth = request.headers.get("Authorization") || "";
+    // Key resolution:
+    //  - BYOK: the caller sends their own "Authorization: Bearer …" — use it.
+    //  - Funded: no caller key, but a server secret OPENAI_API_KEY is configured
+    //    (via `wrangler secret put OPENAI_API_KEY`, or .dev.vars locally) — use it.
+    //    NOTE: funded mode pays for ALL callers from your key. Protect it with
+    //    Cloudflare rate-limiting + a spending cap; never bake the key into source.
+    let auth = request.headers.get("Authorization") || "";
     if (!auth.startsWith("Bearer ")) {
-      return new Response(JSON.stringify({ error: "Missing Authorization (your OpenAI key)." }), {
-        status: 401,
-        headers: { ...cors, "Content-Type": "application/json" },
-      });
+      if (env && env.OPENAI_API_KEY) {
+        auth = "Bearer " + env.OPENAI_API_KEY;
+      } else {
+        return new Response(JSON.stringify({ error: "No key: send your own (BYOK) or configure the OPENAI_API_KEY secret." }), {
+          status: 401,
+          headers: { ...cors, "Content-Type": "application/json" },
+        });
+      }
     }
 
     // Forward the body verbatim; pass the caller's key straight through.

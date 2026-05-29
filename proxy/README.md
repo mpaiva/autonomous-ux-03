@@ -31,6 +31,30 @@ You'll get a URL like `https://penumbra-tts-relay.<you>.workers.dev`.
 Until `RELAY_URL` is set, the OpenAI option stays disabled and "Listen" uses the
 free, built-in browser voice — no relay required.
 
+## Two key models
+
+**BYOK (default).** Each listener sends their own key; the relay forwards it. No
+key is stored anywhere on the server. Nothing to configure here.
+
+**Funded (your key serves everyone).** Store *your* key as an encrypted Worker
+secret — never in the repo, never in client JS:
+
+```bash
+wrangler secret put OPENAI_API_KEY        # paste your key when prompted
+# local testing instead: copy .dev.vars.example -> .dev.vars, paste key, `wrangler dev`
+```
+
+The Worker uses the caller's key if present, otherwise falls back to this secret.
+
+> ⚠️ Funded mode pays for **all** callers from your key. A public endpoint is an
+> abuse target. Before enabling it, add **Cloudflare rate-limiting** and an OpenAI
+> **monthly spend cap**, and keep the origin restriction. For a public site, BYOK
+> is the safer default.
+
+A real key must **never** go in `.env`/source/the repo (the repo is public and the
+site is static — it would be exposed). It belongs only in `wrangler secret` /
+`.dev.vars` (gitignored).
+
 ## Security notes
 
 - The relay only ever calls the fixed OpenAI **speech** URL — it cannot be reused

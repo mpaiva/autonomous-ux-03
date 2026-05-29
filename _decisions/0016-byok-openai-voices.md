@@ -62,6 +62,16 @@ company funds nothing.
 3. Redeploy the site. Until then the OpenAI option is disabled and Listen uses the
    free browser voice — no relay required.
 
+## Chairman decision (2026-05-29, REQ-0009)
+
+Asked whether to use a company key via an `.env` file, the Chairman **confirmed
+BYOK** and declined the funded-for-everyone model. Rationale: on a public static
+site, a company key would either be exposed (in client JS / public repo) or, if held
+in the relay, would pay for all visitors and be an abuse target. BYOK keeps spend at
+zero and removes the abuse surface. The relay still *optionally* supports an
+encrypted `OPENAI_API_KEY` secret (for local testing or a future gated/funded use),
+never stored in the repo; `.gitignore` blocks accidental key commits.
+
 ## Honest limits
 
 Audio playback was verified for the browser engine and the full BYOK UI/state

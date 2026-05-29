@@ -1,0 +1,5 @@
+# Local-only secret template for `wrangler dev`. COPY to `.dev.vars` (which is
+# gitignored) and paste a real key there for LOCAL testing only. Never commit a
+# real key. For production, use `wrangler secret put OPENAI_API_KEY` instead —
+# the value is stored encrypted in Cloudflare, never in the repo.
+OPENAI_API_KEY="sk-REPLACE_ME_LOCAL_ONLY"
