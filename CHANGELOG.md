@@ -2,6 +2,14 @@
 
 All notable changes to the operating record. Newest first.
 
+## 2026-05-30 — Local-dev path for OpenAI voices (REQ-0010)
+
+- listen.js auto-targets http://localhost:8787 only when served from localhost
+  (production stays disabled); OpenAI engine sends BYOK key if present else lets the
+  relay use its .dev.vars secret. Added proxy/wrangler.toml; relay CORS accepts any
+  localhost origin; README one-command quickstart. Verified: enabled on localhost,
+  disabled on the live site.
+
 ## 2026-05-29 — Key model confirmed: BYOK (REQ-0009)
 
 - Chairman asked about an .env key; confirmed BYOK over a funded key (no key in the

@@ -9,6 +9,22 @@ OpenAI and streams the audio back. **It never stores, logs, or inspects the key.
 The user pays OpenAI with their own key; the relay holds no secret and is free to
 run on Cloudflare's Workers free tier.
 
+## Try it locally (hear the voices on your machine, nothing exposed)
+
+`listen.js` automatically points at `http://localhost:8787` when the site is served
+from localhost, so testing is one command after a one-time key setup:
+
+```bash
+cd proxy
+cp .dev.vars.example .dev.vars          # gitignored; paste your key into it
+wrangler dev                            # relay runs at http://localhost:8787
+```
+
+Then serve the site locally (`bundle exec jekyll serve --port 4112`), open a page,
+choose **OpenAI voice** in "Voice settings", and press Listen. With `.dev.vars` set,
+you don't even need to enter a key in the browser — the local relay uses it. Nothing
+leaves your machine, and production is unaffected (it has no relay URL).
+
 ## Deploy (Cloudflare Workers — free)
 
 ```bash

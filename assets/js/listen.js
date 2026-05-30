@@ -22,10 +22,16 @@
 (function () {
   'use strict';
 
-  // ── Owner config ───────────────────────────────────────────────────────
-  // Set this to your deployed relay URL (see proxy/README.md) to enable OpenAI
-  // voices. Leave empty to offer the free browser voice only.
-  var RELAY_URL = '';
+  // ── Relay config ───────────────────────────────────────────────────────
+  // Production: leave PROD_RELAY_URL empty → the OpenAI option stays disabled
+  // (the public site is BYOK with no relay). To enable OpenAI on a deployed site,
+  // set it to your Worker URL (see proxy/README.md).
+  // Local dev only: auto-points at `wrangler dev` (http://localhost:8787) when the
+  // page is served from localhost, so you can hear the OpenAI voices on your own
+  // machine without exposing anything publicly.
+  var PROD_RELAY_URL = '';
+  var IS_LOCAL = ['localhost', '127.0.0.1', '0.0.0.0', '[::1]'].indexOf(location.hostname) !== -1;
+  var RELAY_URL = IS_LOCAL ? 'http://localhost:8787' : PROD_RELAY_URL;
 
   var OPENAI_VOICES = ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'];
   var OPENAI_MODEL = 'gpt-4o-mini-tts';
@@ -146,7 +152,7 @@
 
       var note = document.createElement('p');
       note.className = 'listen__note';
-      note.innerHTML = 'Your key is stored only in your browser and sent only to OpenAI (via a stateless relay) — never to this site, which has no backend. You are billed by OpenAI for usage. <a href="https://platform.openai.com/api-keys">Get a key</a>; a usage-capped key is recommended.';
+      note.innerHTML = 'Your key is stored only in your browser and sent only to OpenAI (via a stateless relay) — never to this site, which has no backend. You are billed by OpenAI for usage. <a href="https://platform.openai.com/api-keys">Get a key</a>; a usage-capped key is recommended. (For local testing with a relay that already holds a key, you can leave this blank.)';
 
       saveBtn.addEventListener('click', function () {
         var persist = remember.checked;
@@ -241,7 +247,10 @@
   }
 
   function chosenEngine() {
-    return (get(K.engine) === 'openai' && RELAY_URL && hasAudio && get(K.key)) ? 'openai' : 'browser';
+    // OpenAI when selected and a relay is configured. A user key (BYOK) is sent if
+    // present; otherwise the relay falls back to its own secret (local .dev.vars /
+    // funded). On the public site RELAY_URL is empty, so this stays 'browser'.
+    return (get(K.engine) === 'openai' && RELAY_URL && hasAudio) ? 'openai' : 'browser';
   }
 
   // ── Browser engine ────────────────────────────────────────────────────
@@ -270,9 +279,11 @@
   function aiClip(i) {
     if (ai.urls[i]) return Promise.resolve(ai.urls[i]);
     var key = get(K.key), voice = get(K.voice) || OPENAI_VOICES[0];
+    var headers = { 'Content-Type': 'application/json' };
+    if (key) headers['Authorization'] = 'Bearer ' + key; // BYOK; else relay uses its own secret
     return fetch(RELAY_URL, {
       method: 'POST', signal: ai.abort.signal,
-      headers: { 'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json' },
+      headers: headers,
       body: JSON.stringify({ model: OPENAI_MODEL, voice: voice, input: ai.q[i] })
     }).then(function (r) {
       if (!r.ok) throw new Error('HTTP ' + r.status);

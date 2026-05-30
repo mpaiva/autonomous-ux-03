@@ -1,0 +1,13 @@
+# Cloudflare Worker config for the stateless OpenAI TTS relay.
+#
+# Local dev (hear OpenAI voices on your machine, nothing exposed):
+#   1. cp .dev.vars.example .dev.vars   # gitignored
+#   2. paste your key into .dev.vars as OPENAI_API_KEY="sk-…"
+#   3. wrangler dev                     # serves at http://localhost:8787
+#   listen.js auto-points at localhost:8787 when the site is served from localhost.
+#
+# Deploy (only if you ever want OpenAI on the live site):
+#   wrangler deploy   then set PROD_RELAY_URL in assets/js/listen.js
+name = "penumbra-tts-relay"
+main = "openai-tts-worker.js"
+compatibility_date = "2026-05-01"
