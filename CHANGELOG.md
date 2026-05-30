@@ -2,6 +2,13 @@
 
 All notable changes to the operating record. Newest first.
 
+## 2026-05-30 — Fix: cache-bust CSS/JS so updates reach returning visitors
+
+- GitHub Pages serves assets with max-age=600 and the URLs had no version string,
+  so returning visitors could see stale CSS/JS for ~10 min after a deploy (e.g. the
+  old voice panel lingering after the modal shipped). Added `?v={{ site.time }}` to
+  the main.css and listen.js URLs — every deploy now busts the cache.
+
 ## 2026-05-30 — Simpler voice UX: modal key entry (REQ-0011)
 
 - Replaced the inline "Voice settings" disclosure with an accessible native
