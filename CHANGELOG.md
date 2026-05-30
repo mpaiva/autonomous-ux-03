@@ -2,6 +2,12 @@
 
 All notable changes to the operating record. Newest first.
 
+## 2026-05-30 — Read-along highlight while listening (REQ-0014)
+
+- Listen now highlights the current text block as it's spoken (both engines),
+  advancing with the audio and scrolling it into view (respects reduced-motion);
+  clears on stop. Subtle accent-tint background + left accent bar; AA contrast kept.
+
 ## 2026-05-30 — Voice speed/pitch controls + direct BYOK confirmed (REQ-0012/0013)
 
 - Chairman confirmed Stratum plays the OpenAI voice → direct browser BYOK works.

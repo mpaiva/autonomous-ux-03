@@ -192,21 +192,35 @@
       if (n.classList.contains('visually-hidden') || n.closest('.visually-hidden')) return;
       if (n.querySelector(BLOCK_SEL)) return;
       var t = (n.textContent || '').replace(/\s+/g, ' ').trim();
-      if (t) blocks.push(t);
+      if (t) blocks.push({ el: n, text: t });
     });
     return blocks;
   }
   function buildQueue(blocks, max) {
     var q = [];
     blocks.forEach(function (b) {
-      if (b.length <= max) { q.push(b); return; }
-      var sentences = b.match(/[^.!?]+[.!?]*/g) || [b];
+      if (b.text.length <= max) { q.push({ el: b.el, text: b.text }); return; }
+      var sentences = b.text.match(/[^.!?]+[.!?]*/g) || [b.text];
       var buf = '';
-      sentences.forEach(function (s) { if ((buf + s).length > max && buf) { q.push(buf.trim()); buf = ''; } buf += s; });
-      if (buf.trim()) q.push(buf.trim());
+      sentences.forEach(function (s) { if ((buf + s).length > max && buf) { q.push({ el: b.el, text: buf.trim() }); buf = ''; } buf += s; });
+      if (buf.trim()) q.push({ el: b.el, text: buf.trim() });
     });
     return q;
   }
+
+  // ── Read-along highlight ──────────────────────────────────────────────
+  var hlEl = null;
+  function prefersReducedMotion() { return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); }
+  function highlight(el) {
+    if (el === hlEl) return;
+    clearHighlight();
+    if (!el) return;
+    hlEl = el;
+    el.classList.add('listen-reading');
+    try { el.scrollIntoView({ block: 'nearest', behavior: prefersReducedMotion() ? 'auto' : 'smooth' }); }
+    catch (e) { try { el.scrollIntoView(); } catch (e2) {} }
+  }
+  function clearHighlight() { if (hlEl) { hlEl.classList.remove('listen-reading'); hlEl = null; } }
 
   // ── Playback state ────────────────────────────────────────────────────
   var state = 'idle', engineInUse = 'browser';
@@ -214,12 +228,13 @@
   var ai = { q: [], idx: 0, audio: null, abort: null, urls: {} };
 
   function setPlayingUI() { setPlayLabel('Pause', '⏸'); playBtn.setAttribute('aria-pressed', 'true'); stopBtn.hidden = false; state = 'playing'; status.textContent = 'Playing…'; }
-  function reset(msg) { if (synth) synth.cancel(); aiTeardown(); state = 'idle'; bq = []; bidx = 0; setPlayLabel('Listen to this page', '▶'); playBtn.setAttribute('aria-pressed', 'false'); stopBtn.hidden = true; status.textContent = msg || ''; }
+  function reset(msg) { if (synth) synth.cancel(); aiTeardown(); clearHighlight(); state = 'idle'; bq = []; bidx = 0; setPlayLabel('Listen to this page', '▶'); playBtn.setAttribute('aria-pressed', 'false'); stopBtn.hidden = true; status.textContent = msg || ''; }
   function chosenEngine() { return (get(K.engine) === 'openai' && hasAudio && get(K.key)) ? 'openai' : 'browser'; }
 
   function browserNext() {
     if (bidx >= bq.length) { reset('Finished.'); return; }
-    var u = new SpeechSynthesisUtterance(bq[bidx]);
+    highlight(bq[bidx].el);
+    var u = new SpeechSynthesisUtterance(bq[bidx].text);
     u.rate = clamp(getNum(K.rate, 1), 0.5, 2);
     u.pitch = clamp(getNum(K.pitch, 1), 0, 2);
     u.onend = function () { if (state === 'playing' && engineInUse === 'browser') { bidx++; browserNext(); } };
@@ -245,12 +260,13 @@
     var key = get(K.key), voice = get(K.voice) || OPENAI_VOICES[0];
     var headers = { 'Content-Type': 'application/json' };
     if (key) headers['Authorization'] = 'Bearer ' + key;
-    return fetch(TTS_URL, { method: 'POST', signal: ai.abort.signal, headers: headers, body: JSON.stringify({ model: OPENAI_MODEL, voice: voice, input: ai.q[i], speed: clamp(getNum(K.rate, 1), 0.25, 4) }) })
+    return fetch(TTS_URL, { method: 'POST', signal: ai.abort.signal, headers: headers, body: JSON.stringify({ model: OPENAI_MODEL, voice: voice, input: ai.q[i].text, speed: clamp(getNum(K.rate, 1), 0.25, 4) }) })
       .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.blob(); })
       .then(function (b) { var u = URL.createObjectURL(b); ai.urls[i] = u; return u; });
   }
   function aiPlayIdx() {
     if (ai.idx >= ai.q.length) { reset('Finished.'); return; }
+    highlight(ai.q[ai.idx].el);
     aiClip(ai.idx).then(function (url) {
       if (state === 'idle') return;
       ai.audio.src = url; var p = ai.audio.play(); if (p && p.catch) p.catch(function () {});

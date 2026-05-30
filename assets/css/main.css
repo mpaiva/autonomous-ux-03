@@ -330,6 +330,15 @@ a:hover { color: var(--accent-deep); text-decoration-thickness: 2px; }
   .listen__btn--play[aria-pressed="true"] { color: #06120f; }
 }
 .listen__status { font-size: var(--step--1); color: var(--ink-faint); }
+
+/* Read-along: the block currently being spoken */
+.listen-reading {
+  background: var(--accent-tint);
+  box-shadow: inset 3px 0 0 var(--accent);
+  border-radius: 4px;
+  transition: background .2s ease;
+}
+
 .listen__btn--primary { background: var(--accent); color: #fff; border-color: var(--accent); }
 .listen__btn--primary:hover { background: var(--accent-deep); color: #fff; border-color: var(--accent-deep); }
 
