@@ -2,6 +2,14 @@
 
 All notable changes to the operating record. Newest first.
 
+## 2026-05-30 — Simpler voice UX: modal key entry (REQ-0011)
+
+- Replaced the inline "Voice settings" disclosure with an accessible native
+  <dialog>: bar is just Listen (+ Stop) plus a small "Voice" button (only when a
+  relay is configured) that opens a one-field key-entry modal. Public site (no
+  relay) shows only "Listen" with the free browser voice. Verified: dialog focus
+  management, save/forget, Lighthouse a11y 100.
+
 ## 2026-05-30 — Local-dev path for OpenAI voices (REQ-0010)
 
 - listen.js auto-targets http://localhost:8787 only when served from localhost

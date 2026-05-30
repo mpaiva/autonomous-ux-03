@@ -1,34 +1,26 @@
 /* ─────────────────────────────────────────────────────────────────────────
-   Listen — read the current page aloud. Two engines:
+   Listen — read the current page aloud.
 
-   1. Browser voice (default): the built-in Web Speech API. No key, no network,
-      no cost. Always available where supported.
-   2. OpenAI voice (BYOK, optional): higher-quality voices using the USER'S OWN
-      OpenAI key, entered in "Voice settings" and stored only in their browser
-      (sessionStorage by default; localStorage if they tick "remember"). Because
-      OpenAI blocks authenticated browser POST (verified — CORS preflight fails),
-      requests go through a tiny stateless relay (see proxy/). Set RELAY_URL below
-      after deploying it; until then the OpenAI option stays disabled.
+   UX: "Listen to this page" just works with the free, built-in browser voice.
+   When premium voices are available (a relay is configured), a small "Voice"
+   button opens a simple modal where the user pastes their own OpenAI key (BYOK).
+   That's the whole flow — no inline settings, radios, or toggles.
 
-   The user's key is never sent to us (this site has no backend/analytics) — only
-   to the relay, which forwards it to OpenAI and forgets it. The repo is public, so
-   that is auditable.
+   The key is stored only in the user's browser (sessionStorage by default;
+   localStorage if they tick "remember") and sent only to OpenAI via a stateless
+   relay (OpenAI blocks direct browser POST). The site has no backend; the repo is
+   public, so this is auditable.
 
    Progressive enhancement: if no speech engine is available, no control renders.
-   Accessibility intent (built to standard; validated by the panel, not yet claimed
-   conformant): opt-in, never autoplays, real labelled controls, keyboard operable,
-   does not replace or fight assistive technology.
+   Accessibility: opt-in, never autoplays, real labelled controls, native <dialog>
+   focus management, keyboard operable; does not replace or fight assistive tech.
    ───────────────────────────────────────────────────────────────────────── */
 (function () {
   'use strict';
 
-  // ── Relay config ───────────────────────────────────────────────────────
-  // Production: leave PROD_RELAY_URL empty → the OpenAI option stays disabled
-  // (the public site is BYOK with no relay). To enable OpenAI on a deployed site,
-  // set it to your Worker URL (see proxy/README.md).
-  // Local dev only: auto-points at `wrangler dev` (http://localhost:8787) when the
-  // page is served from localhost, so you can hear the OpenAI voices on your own
-  // machine without exposing anything publicly.
+  // ── Relay config ────────────────────────────────────────────────────────
+  // Production: leave PROD_RELAY_URL empty → premium voices stay off (BYOK with no
+  // relay = browser voice only). Local dev auto-targets `wrangler dev`.
   var PROD_RELAY_URL = '';
   var IS_LOCAL = ['localhost', '127.0.0.1', '0.0.0.0', '[::1]'].indexOf(location.hostname) !== -1;
   var RELAY_URL = IS_LOCAL ? 'http://localhost:8787' : PROD_RELAY_URL;
@@ -39,164 +31,126 @@
   var synth = window.speechSynthesis;
   var hasBrowserTTS = !!synth && typeof window.SpeechSynthesisUtterance !== 'undefined';
   var hasAudio = typeof window.Audio !== 'undefined' && typeof window.fetch !== 'undefined';
-  if (!hasBrowserTTS && !(RELAY_URL && hasAudio)) return; // nothing we can do
+  var premium = !!RELAY_URL && hasAudio;
+  if (!hasBrowserTTS && !premium) return;
 
   var main = document.getElementById('main');
   if (!main) return;
 
-  // ── Settings storage (session by default; local if "remember") ──────────
-  var K = {
-    engine: 'penumbra.listen.engine',
-    key: 'penumbra.listen.openaiKey',
-    voice: 'penumbra.listen.voice',
-    remember: 'penumbra.listen.remember'
-  };
+  // ── Settings storage ─────────────────────────────────────────────────────
+  var K = { engine: 'penumbra.listen.engine', key: 'penumbra.listen.openaiKey', voice: 'penumbra.listen.voice', remember: 'penumbra.listen.remember' };
   function get(k) { try { return localStorage.getItem(k) || sessionStorage.getItem(k) || ''; } catch (e) { return ''; } }
-  function set(k, v, persist) { try { (persist ? localStorage : sessionStorage).setItem(k, v); (persist ? sessionStorage : localStorage).removeItem(k); } catch (e) {} }
+  function put(k, v, persist) { try { (persist ? localStorage : sessionStorage).setItem(k, v); (persist ? sessionStorage : localStorage).removeItem(k); } catch (e) {} }
   function del(k) { try { sessionStorage.removeItem(k); localStorage.removeItem(k); } catch (e) {} }
   function remembering() { return get(K.remember) === '1'; }
 
-  // ── Build the control ───────────────────────────────────────────────────
+  // ── Control bar ──────────────────────────────────────────────────────────
   var bar = document.createElement('div');
   bar.className = 'listen';
   bar.setAttribute('role', 'group');
   bar.setAttribute('aria-label', 'Listen to this page');
 
-  var playBtn = document.createElement('button');
-  playBtn.type = 'button';
-  playBtn.className = 'listen__btn listen__btn--play';
-  playBtn.setAttribute('aria-pressed', 'false');
-
-  var stopBtn = document.createElement('button');
-  stopBtn.type = 'button';
-  stopBtn.className = 'listen__btn listen__btn--stop';
-  stopBtn.hidden = true;
+  var playBtn = el('button', 'listen__btn listen__btn--play'); playBtn.type = 'button'; playBtn.setAttribute('aria-pressed', 'false');
+  var stopBtn = el('button', 'listen__btn listen__btn--stop'); stopBtn.type = 'button'; stopBtn.hidden = true;
   stopBtn.innerHTML = '<span aria-hidden="true">■</span> Stop';
+  var status = el('span', 'listen__status'); status.setAttribute('role', 'status'); status.setAttribute('aria-live', 'polite');
 
-  var status = document.createElement('span');
-  status.className = 'listen__status';
-  status.setAttribute('role', 'status');
-  status.setAttribute('aria-live', 'polite');
-
-  function setPlayLabel(label, icon) {
-    playBtn.innerHTML = '<span aria-hidden="true">' + icon + '</span> ' + label;
-  }
+  function setPlayLabel(label, icon) { playBtn.innerHTML = '<span aria-hidden="true">' + icon + '</span> ' + label; }
   setPlayLabel('Listen to this page', '▶');
 
   bar.appendChild(playBtn);
   bar.appendChild(stopBtn);
-  bar.appendChild(buildSettings());
+
+  var voiceBtn = null, dialog = null;
+  if (premium) {
+    voiceBtn = el('button', 'listen__btn listen__btn--voice'); voiceBtn.type = 'button';
+    bar.appendChild(voiceBtn);
+    dialog = buildDialog();
+    bar.appendChild(dialog);
+    voiceBtn.addEventListener('click', openDialog);
+    updateVoiceBtn();
+  }
   bar.appendChild(status);
 
   var hostEl = main.querySelector('.container') || main;
   hostEl.insertBefore(bar, hostEl.firstChild);
 
-  // ── Settings panel ──────────────────────────────────────────────────────
-  function buildSettings() {
-    var d = document.createElement('details');
-    d.className = 'listen__settings';
-    var s = document.createElement('summary');
-    s.className = 'listen__btn';
-    s.innerHTML = '<span aria-hidden="true">⚙</span> Voice settings';
-    d.appendChild(s);
+  // ── Voice modal ──────────────────────────────────────────────────────────
+  function buildDialog() {
+    var d = document.createElement('dialog');
+    d.className = 'listen__dialog';
+    var titleId = 'listen-dialog-title';
+    d.setAttribute('aria-labelledby', titleId);
 
-    var wrap = document.createElement('div');
-    wrap.className = 'listen__panel';
+    var head = el('div', 'listen__dialoghead');
+    var h = document.createElement('h2'); h.id = titleId; h.textContent = 'Voice';
+    var x = el('button', 'listen__close'); x.type = 'button'; x.setAttribute('aria-label', 'Close'); x.innerHTML = '<span aria-hidden="true">×</span>';
+    head.appendChild(h); head.appendChild(x); d.appendChild(head);
 
-    // Engine choice
-    var fs = document.createElement('fieldset');
-    fs.className = 'listen__fieldset';
-    fs.innerHTML = '<legend>Voice</legend>';
-    var engine = get(K.engine) || 'browser';
-    fs.appendChild(radio('listen-engine', 'browser', 'Browser voice (free, no setup)', engine === 'browser'));
-    var openaiAvailable = !!RELAY_URL && hasAudio;
-    fs.appendChild(radio('listen-engine', 'openai',
-      'OpenAI voice — your own key' + (openaiAvailable ? '' : ' (not enabled yet)'),
-      engine === 'openai', !openaiAvailable));
-    wrap.appendChild(fs);
+    var intro = el('p', 'listen__note');
+    intro.textContent = 'The browser voice is free and needs no setup. For higher-quality voices, use your own OpenAI key.';
+    d.appendChild(intro);
 
-    if (openaiAvailable) {
-      var keyId = 'listen-openai-key';
-      var keyLabel = document.createElement('label');
-      keyLabel.setAttribute('for', keyId);
-      keyLabel.className = 'listen__label';
-      keyLabel.textContent = 'Your OpenAI API key';
-      var keyInput = document.createElement('input');
-      keyInput.id = keyId; keyInput.type = 'password'; keyInput.className = 'listen__input';
-      keyInput.autocomplete = 'off'; keyInput.spellcheck = false;
-      keyInput.placeholder = 'sk-…'; keyInput.value = get(K.key);
+    var keyLabel = document.createElement('label'); keyLabel.className = 'listen__label'; keyLabel.setAttribute('for', 'listen-key'); keyLabel.textContent = 'OpenAI API key';
+    var keyInput = document.createElement('input'); keyInput.id = 'listen-key'; keyInput.type = 'password'; keyInput.className = 'listen__input';
+    keyInput.autocomplete = 'off'; keyInput.spellcheck = false; keyInput.placeholder = 'sk-…'; keyInput.setAttribute('autofocus', '');
 
-      var voiceId = 'listen-openai-voice';
-      var voiceLabel = document.createElement('label');
-      voiceLabel.setAttribute('for', voiceId); voiceLabel.className = 'listen__label';
-      voiceLabel.textContent = 'Voice';
-      var voiceSel = document.createElement('select');
-      voiceSel.id = voiceId; voiceSel.className = 'listen__input';
-      var savedVoice = get(K.voice) || OPENAI_VOICES[0];
-      OPENAI_VOICES.forEach(function (v) {
-        var o = document.createElement('option'); o.value = v; o.textContent = v;
-        if (v === savedVoice) o.selected = true; voiceSel.appendChild(o);
-      });
+    var voiceLabel = document.createElement('label'); voiceLabel.className = 'listen__label'; voiceLabel.setAttribute('for', 'listen-voice'); voiceLabel.textContent = 'Voice';
+    var voiceSel = document.createElement('select'); voiceSel.id = 'listen-voice'; voiceSel.className = 'listen__input';
+    OPENAI_VOICES.forEach(function (v) { var o = document.createElement('option'); o.value = v; o.textContent = v; voiceSel.appendChild(o); });
 
-      var rememberWrap = document.createElement('label');
-      rememberWrap.className = 'listen__check';
-      var remember = document.createElement('input');
-      remember.type = 'checkbox'; remember.checked = remembering();
-      rememberWrap.appendChild(remember);
-      rememberWrap.appendChild(document.createTextNode(' Remember on this device (otherwise cleared when you close the tab)'));
+    var remWrap = document.createElement('label'); remWrap.className = 'listen__check';
+    var rem = document.createElement('input'); rem.type = 'checkbox';
+    remWrap.appendChild(rem); remWrap.appendChild(document.createTextNode(' Remember on this device (otherwise cleared when you close the tab)'));
 
-      var saveBtn = document.createElement('button');
-      saveBtn.type = 'button'; saveBtn.className = 'listen__btn'; saveBtn.textContent = 'Save';
-      var forgetBtn = document.createElement('button');
-      forgetBtn.type = 'button'; forgetBtn.className = 'listen__btn'; forgetBtn.textContent = 'Forget key';
+    var actions = el('div', 'listen__actions');
+    var useAi = el('button', 'listen__btn listen__btn--primary'); useAi.type = 'button'; useAi.textContent = 'Use OpenAI voice';
+    var useBrowser = el('button', 'listen__btn'); useBrowser.type = 'button'; useBrowser.textContent = 'Use free browser voice';
+    actions.appendChild(useAi); actions.appendChild(useBrowser);
 
-      var note = document.createElement('p');
-      note.className = 'listen__note';
-      note.innerHTML = 'Your key is stored only in your browser and sent only to OpenAI (via a stateless relay) — never to this site, which has no backend. You are billed by OpenAI for usage. <a href="https://platform.openai.com/api-keys">Get a key</a>; a usage-capped key is recommended. (For local testing with a relay that already holds a key, you can leave this blank.)';
+    var forget = el('button', 'listen__btn listen__forget'); forget.type = 'button'; forget.textContent = 'Forget saved key';
 
-      saveBtn.addEventListener('click', function () {
-        var persist = remember.checked;
-        set(K.remember, persist ? '1' : '0', persist);
-        if (keyInput.value.trim()) set(K.key, keyInput.value.trim(), persist); else del(K.key);
-        set(K.voice, voiceSel.value, persist);
-        status.textContent = 'Voice settings saved.';
-      });
-      forgetBtn.addEventListener('click', function () {
-        del(K.key); keyInput.value = ''; status.textContent = 'Key forgotten.';
-      });
-      document.querySelectorAll('input[name="listen-engine"]').forEach(function (r) {
-        r.addEventListener('change', function () { set(K.engine, r.value, remembering()); });
-      });
+    var note = el('p', 'listen__note');
+    note.innerHTML = 'Your key is stored only in your browser and sent only to OpenAI (via a stateless relay) — never to this site, which has no backend. You are billed by OpenAI. <a href="https://platform.openai.com/api-keys">Get a key</a>; a usage-capped key is recommended.';
 
-      wrap.appendChild(keyLabel); wrap.appendChild(keyInput);
-      wrap.appendChild(voiceLabel); wrap.appendChild(voiceSel);
-      wrap.appendChild(rememberWrap);
-      var btns = document.createElement('div'); btns.className = 'listen__btns';
-      btns.appendChild(saveBtn); btns.appendChild(forgetBtn);
-      wrap.appendChild(btns);
-      wrap.appendChild(note);
-    } else {
-      var owner = document.createElement('p');
-      owner.className = 'listen__note';
-      owner.textContent = 'OpenAI voices are not enabled. The site owner can turn them on by deploying the stateless relay (see proxy/README.md) and setting RELAY_URL — no shared key required; each listener brings their own.';
-      wrap.appendChild(owner);
-      document.querySelectorAll && setTimeout(function () {
-        var rs = bar.querySelectorAll('input[name="listen-engine"]');
-        rs.forEach(function (r) { r.addEventListener('change', function () { set(K.engine, r.value, remembering()); }); });
-      }, 0);
-    }
+    d.appendChild(keyLabel); d.appendChild(keyInput);
+    d.appendChild(voiceLabel); d.appendChild(voiceSel);
+    d.appendChild(remWrap); d.appendChild(actions); d.appendChild(forget); d.appendChild(note);
 
-    d.appendChild(wrap);
+    function close(msg) { try { d.close(); } catch (e) {} if (msg) status.textContent = msg; if (lastFocus) lastFocus.focus(); }
+    x.addEventListener('click', function () { close(); });
+    useBrowser.addEventListener('click', function () {
+      put(K.engine, 'browser', remembering()); updateVoiceBtn(); close('Using the free browser voice.');
+    });
+    useAi.addEventListener('click', function () {
+      var persist = rem.checked;
+      put(K.remember, persist ? '1' : '0', persist);
+      if (keyInput.value.trim()) put(K.key, keyInput.value.trim(), persist);
+      put(K.voice, voiceSel.value, persist);
+      put(K.engine, 'openai', persist);
+      updateVoiceBtn();
+      close('Using the OpenAI voice (' + voiceSel.value + ').');
+    });
+    forget.addEventListener('click', function () { del(K.key); keyInput.value = ''; updateVoiceBtn(); refreshDialog(); status.textContent = 'Saved key forgotten.'; });
+
+    d.addEventListener('cancel', function () { if (lastFocus) setTimeout(function () { lastFocus.focus(); }, 0); });
+
+    d._refresh = function () {
+      keyInput.value = get(K.key);
+      voiceSel.value = get(K.voice) || OPENAI_VOICES[0];
+      rem.checked = remembering();
+      forget.hidden = !get(K.key);
+    };
     return d;
   }
 
-  function radio(name, value, label, checked, disabled) {
-    var l = document.createElement('label'); l.className = 'listen__check';
-    var i = document.createElement('input');
-    i.type = 'radio'; i.name = name; i.value = value;
-    if (checked) i.checked = true; if (disabled) i.disabled = true;
-    l.appendChild(i); l.appendChild(document.createTextNode(' ' + label));
-    return l;
+  var lastFocus = null;
+  function openDialog() { lastFocus = voiceBtn; refreshDialog(); if (dialog.showModal) dialog.showModal(); else dialog.setAttribute('open', ''); }
+  function refreshDialog() { if (dialog && dialog._refresh) dialog._refresh(); }
+  function updateVoiceBtn() {
+    if (!voiceBtn) return;
+    var usingAi = get(K.engine) === 'openai' && get(K.key);
+    voiceBtn.innerHTML = '<span aria-hidden="true">⚙</span> Voice: ' + (usingAi ? 'OpenAI' : 'browser');
   }
 
   // ── Readable text ─────────────────────────────────────────────────────
@@ -219,41 +173,21 @@
       if (b.length <= max) { q.push(b); return; }
       var sentences = b.match(/[^.!?]+[.!?]*/g) || [b];
       var buf = '';
-      sentences.forEach(function (s) {
-        if ((buf + s).length > max && buf) { q.push(buf.trim()); buf = ''; }
-        buf += s;
-      });
+      sentences.forEach(function (s) { if ((buf + s).length > max && buf) { q.push(buf.trim()); buf = ''; } buf += s; });
       if (buf.trim()) q.push(buf.trim());
     });
     return q;
   }
 
-  // ── Shared state ─────────────────────────────────────────────────────
-  var state = 'idle';        // idle | playing | paused
-  var engineInUse = 'browser';
-  var bq = [], bidx = 0;     // browser queue
+  // ── Playback state ────────────────────────────────────────────────────
+  var state = 'idle', engineInUse = 'browser';
+  var bq = [], bidx = 0;
   var ai = { q: [], idx: 0, audio: null, abort: null, urls: {} };
 
-  function setPlayingUI() {
-    setPlayLabel('Pause', '⏸'); playBtn.setAttribute('aria-pressed', 'true');
-    stopBtn.hidden = false; state = 'playing'; status.textContent = 'Playing…';
-  }
-  function reset(msg) {
-    if (synth) synth.cancel();
-    aiTeardown();
-    state = 'idle'; bq = []; bidx = 0;
-    setPlayLabel('Listen to this page', '▶'); playBtn.setAttribute('aria-pressed', 'false');
-    stopBtn.hidden = true; status.textContent = msg || '';
-  }
+  function setPlayingUI() { setPlayLabel('Pause', '⏸'); playBtn.setAttribute('aria-pressed', 'true'); stopBtn.hidden = false; state = 'playing'; status.textContent = 'Playing…'; }
+  function reset(msg) { if (synth) synth.cancel(); aiTeardown(); state = 'idle'; bq = []; bidx = 0; setPlayLabel('Listen to this page', '▶'); playBtn.setAttribute('aria-pressed', 'false'); stopBtn.hidden = true; status.textContent = msg || ''; }
+  function chosenEngine() { return (get(K.engine) === 'openai' && RELAY_URL && hasAudio) ? 'openai' : 'browser'; }
 
-  function chosenEngine() {
-    // OpenAI when selected and a relay is configured. A user key (BYOK) is sent if
-    // present; otherwise the relay falls back to its own secret (local .dev.vars /
-    // funded). On the public site RELAY_URL is empty, so this stays 'browser'.
-    return (get(K.engine) === 'openai' && RELAY_URL && hasAudio) ? 'openai' : 'browser';
-  }
-
-  // ── Browser engine ────────────────────────────────────────────────────
   function browserNext() {
     if (bidx >= bq.length) { reset('Finished.'); return; }
     var u = new SpeechSynthesisUtterance(bq[bidx]);
@@ -269,7 +203,6 @@
     bidx = 0; setPlayingUI(); browserNext();
   }
 
-  // ── OpenAI engine (BYOK via relay) ────────────────────────────────────
   function aiTeardown() {
     if (ai.abort) { try { ai.abort.abort(); } catch (e) {} }
     if (ai.audio) { try { ai.audio.pause(); } catch (e) {} ai.audio = null; }
@@ -280,69 +213,45 @@
     if (ai.urls[i]) return Promise.resolve(ai.urls[i]);
     var key = get(K.key), voice = get(K.voice) || OPENAI_VOICES[0];
     var headers = { 'Content-Type': 'application/json' };
-    if (key) headers['Authorization'] = 'Bearer ' + key; // BYOK; else relay uses its own secret
-    return fetch(RELAY_URL, {
-      method: 'POST', signal: ai.abort.signal,
-      headers: headers,
-      body: JSON.stringify({ model: OPENAI_MODEL, voice: voice, input: ai.q[i] })
-    }).then(function (r) {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.blob();
-    }).then(function (b) { var u = URL.createObjectURL(b); ai.urls[i] = u; return u; });
+    if (key) headers['Authorization'] = 'Bearer ' + key;
+    return fetch(RELAY_URL, { method: 'POST', signal: ai.abort.signal, headers: headers, body: JSON.stringify({ model: OPENAI_MODEL, voice: voice, input: ai.q[i] }) })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.blob(); })
+      .then(function (b) { var u = URL.createObjectURL(b); ai.urls[i] = u; return u; });
   }
   function aiPlayIdx() {
     if (ai.idx >= ai.q.length) { reset('Finished.'); return; }
     aiClip(ai.idx).then(function (url) {
       if (state === 'idle') return;
-      ai.audio.src = url;
-      var p = ai.audio.play(); if (p && p.catch) p.catch(function () {});
+      ai.audio.src = url; var p = ai.audio.play(); if (p && p.catch) p.catch(function () {});
       status.textContent = 'Playing…';
       if (ai.idx + 1 < ai.q.length) aiClip(ai.idx + 1).catch(function () {});
     }).catch(function (err) {
       if (err && err.name === 'AbortError') return;
-      var first = ai.idx === 0;
-      aiTeardown(); state = 'idle';
-      if (first) {
-        // fall back to the free browser voice so the user still gets audio
-        status.textContent = 'OpenAI voice unavailable (' + (err && err.message || 'error') + '). Using the browser voice.';
-        browserStart();
-      } else {
-        reset('OpenAI voice stopped (' + (err && err.message || 'error') + ').');
-      }
+      var first = ai.idx === 0; aiTeardown(); state = 'idle';
+      if (first) { status.textContent = 'OpenAI voice unavailable (' + (err && err.message || 'error') + '). Using the browser voice.'; browserStart(); }
+      else { reset('OpenAI voice stopped (' + (err && err.message || 'error') + ').'); }
     });
   }
   function aiStart() {
     engineInUse = 'openai';
     ai.q = buildQueue(getBlocks(), 500);
     if (!ai.q.length) { status.textContent = 'Nothing to read on this page.'; return; }
-    ai.idx = 0; ai.abort = new AbortController();
-    ai.audio = new Audio();
+    ai.idx = 0; ai.abort = new AbortController(); ai.audio = new Audio();
     ai.audio.addEventListener('ended', function () {
-      if (state === 'playing' && engineInUse === 'openai') {
-        if (ai.urls[ai.idx]) { URL.revokeObjectURL(ai.urls[ai.idx]); delete ai.urls[ai.idx]; }
-        ai.idx++; aiPlayIdx();
-      }
+      if (state === 'playing' && engineInUse === 'openai') { if (ai.urls[ai.idx]) { URL.revokeObjectURL(ai.urls[ai.idx]); delete ai.urls[ai.idx]; } ai.idx++; aiPlayIdx(); }
     });
     setPlayingUI(); status.textContent = 'Loading…'; aiPlayIdx();
   }
 
-  // ── Unified controls ──────────────────────────────────────────────────
   playBtn.addEventListener('click', function () {
-    if (state === 'idle') {
-      engineInUse = chosenEngine();
-      if (engineInUse === 'openai') aiStart(); else browserStart();
-    } else if (state === 'playing') {
-      if (engineInUse === 'openai') { if (ai.audio) ai.audio.pause(); }
-      else if (synth) synth.pause();
-      state = 'paused'; setPlayLabel('Resume', '▶'); status.textContent = 'Paused.';
-    } else if (state === 'paused') {
-      if (engineInUse === 'openai') { if (ai.audio) ai.audio.play(); }
-      else if (synth) synth.resume();
-      state = 'playing'; setPlayLabel('Pause', '⏸'); status.textContent = 'Playing…';
-    }
+    if (state === 'idle') { engineInUse = chosenEngine(); if (engineInUse === 'openai') aiStart(); else browserStart(); }
+    else if (state === 'playing') { if (engineInUse === 'openai') { if (ai.audio) ai.audio.pause(); } else if (synth) synth.pause(); state = 'paused'; setPlayLabel('Resume', '▶'); status.textContent = 'Paused.'; }
+    else if (state === 'paused') { if (engineInUse === 'openai') { if (ai.audio) ai.audio.play(); } else if (synth) synth.resume(); state = 'playing'; setPlayLabel('Pause', '⏸'); status.textContent = 'Playing…'; }
   });
   stopBtn.addEventListener('click', function () { reset('Stopped.'); });
 
   window.addEventListener('beforeunload', function () { if (synth) synth.cancel(); aiTeardown(); });
   window.addEventListener('pagehide', function () { if (synth) synth.cancel(); aiTeardown(); });
+
+  function el(tag, cls) { var e = document.createElement(tag); if (cls) e.className = cls; return e; }
 })();
