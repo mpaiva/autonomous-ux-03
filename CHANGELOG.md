@@ -2,6 +2,18 @@
 
 All notable changes to the operating record. Newest first.
 
+## 2026-05-30 — Correction: OpenAI BYOK works directly (no relay) — REQ-0012
+
+- Studied Stratum (Chairman's other site): it does BYOK OpenAI TTS directly from the
+  browser. Re-tested our CORS claim with a proper control — a preflighted POST to a
+  CORS-OK endpoint (httpbin) ALSO failed in the test browser, proving the original
+  "OpenAI blocks browser POST" was a test-sandbox artifact, not OpenAI.
+- Switched the Listen feature to call OpenAI directly (BYOK): premium voices now
+  work on the public site with no relay/owner-deploy; browser-voice fallback remains.
+- Corrected DR-0016 honestly (disproved "blocked"; did NOT claim "works" — can't make
+  a cross-origin POST from the sandbox). Relay retained in proxy/ pending the
+  Chairman's confirmation that Stratum's OpenAI voice actually speaks.
+
 ## 2026-05-30 — Fix: cache-bust CSS/JS so updates reach returning visitors
 
 - GitHub Pages serves assets with max-age=600 and the URLs had no version string,

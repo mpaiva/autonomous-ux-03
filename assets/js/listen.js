@@ -18,12 +18,16 @@
 (function () {
   'use strict';
 
-  // ── Relay config ────────────────────────────────────────────────────────
-  // Production: leave PROD_RELAY_URL empty → premium voices stay off (BYOK with no
-  // relay = browser voice only). Local dev auto-targets `wrangler dev`.
-  var PROD_RELAY_URL = '';
-  var IS_LOCAL = ['localhost', '127.0.0.1', '0.0.0.0', '[::1]'].indexOf(location.hostname) !== -1;
-  var RELAY_URL = IS_LOCAL ? 'http://localhost:8787' : PROD_RELAY_URL;
+  // ── TTS endpoint ─────────────────────────────────────────────────────────
+  // OpenAI BYOK is called DIRECTLY from the browser (the standard approach, as on
+  // Stratum). An earlier probe suggested OpenAI blocked browser POST, but that was
+  // a sandbox artifact — a control POST to a CORS-friendly endpoint failed the same
+  // way, so the failure was the test environment, not OpenAI. If a specific runtime
+  // ever blocks the direct call, the code falls back to the browser voice; you can
+  // also set RELAY_URL to a stateless relay (see proxy/) as an override.
+  var OPENAI_ENDPOINT = 'https://api.openai.com/v1/audio/speech';
+  var RELAY_URL = '';
+  var TTS_URL = RELAY_URL || OPENAI_ENDPOINT;
 
   var OPENAI_VOICES = ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'];
   var OPENAI_MODEL = 'gpt-4o-mini-tts';
@@ -31,7 +35,7 @@
   var synth = window.speechSynthesis;
   var hasBrowserTTS = !!synth && typeof window.SpeechSynthesisUtterance !== 'undefined';
   var hasAudio = typeof window.Audio !== 'undefined' && typeof window.fetch !== 'undefined';
-  var premium = !!RELAY_URL && hasAudio;
+  var premium = hasAudio; // OpenAI BYOK needs only the user's key — available everywhere
   if (!hasBrowserTTS && !premium) return;
 
   var main = document.getElementById('main');
@@ -111,7 +115,7 @@
     var forget = el('button', 'listen__btn listen__forget'); forget.type = 'button'; forget.textContent = 'Forget saved key';
 
     var note = el('p', 'listen__note');
-    note.innerHTML = 'Your key is stored only in your browser and sent only to OpenAI (via a stateless relay) — never to this site, which has no backend. You are billed by OpenAI. <a href="https://platform.openai.com/api-keys">Get a key</a>; a usage-capped key is recommended.';
+    note.innerHTML = 'Your key is stored only in your browser and sent only to OpenAI (directly, from your browser) — never to this site, which has no backend. You are billed by OpenAI. <a href="https://platform.openai.com/api-keys">Get a key</a>; a usage-capped key is recommended.';
 
     d.appendChild(keyLabel); d.appendChild(keyInput);
     d.appendChild(voiceLabel); d.appendChild(voiceSel);
@@ -186,7 +190,7 @@
 
   function setPlayingUI() { setPlayLabel('Pause', '⏸'); playBtn.setAttribute('aria-pressed', 'true'); stopBtn.hidden = false; state = 'playing'; status.textContent = 'Playing…'; }
   function reset(msg) { if (synth) synth.cancel(); aiTeardown(); state = 'idle'; bq = []; bidx = 0; setPlayLabel('Listen to this page', '▶'); playBtn.setAttribute('aria-pressed', 'false'); stopBtn.hidden = true; status.textContent = msg || ''; }
-  function chosenEngine() { return (get(K.engine) === 'openai' && RELAY_URL && hasAudio) ? 'openai' : 'browser'; }
+  function chosenEngine() { return (get(K.engine) === 'openai' && hasAudio && get(K.key)) ? 'openai' : 'browser'; }
 
   function browserNext() {
     if (bidx >= bq.length) { reset('Finished.'); return; }
@@ -214,7 +218,7 @@
     var key = get(K.key), voice = get(K.voice) || OPENAI_VOICES[0];
     var headers = { 'Content-Type': 'application/json' };
     if (key) headers['Authorization'] = 'Bearer ' + key;
-    return fetch(RELAY_URL, { method: 'POST', signal: ai.abort.signal, headers: headers, body: JSON.stringify({ model: OPENAI_MODEL, voice: voice, input: ai.q[i] }) })
+    return fetch(TTS_URL, { method: 'POST', signal: ai.abort.signal, headers: headers, body: JSON.stringify({ model: OPENAI_MODEL, voice: voice, input: ai.q[i] }) })
       .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.blob(); })
       .then(function (b) { var u = URL.createObjectURL(b); ai.urls[i] = u; return u; });
   }

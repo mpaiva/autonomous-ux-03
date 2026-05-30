@@ -128,21 +128,21 @@ groups:
         refs:
           - { label: "DR-0012", url: "/decisions/memory-and-dreaming/" }
 
-      - title: "OpenAI voices for Listen (BYOK) — scaffolded; deploy relay to enable"
-        status: "Scaffolded — one-time deploy"
+      - title: "OpenAI voices for Listen (BYOK) — live; confirm direct call speaks"
+        status: "Live — 1 question pending"
         status_class: "warn"
-        owner: "Chairman/human (deploy free Cloudflare Worker + set RELAY_URL)"
+        owner: "Chairman (one-word confirmation)"
         dependencies: >-
-          BYOK client UI + stateless relay are built (DR-0016). No funded key (each
-          listener brings their own). OpenAI blocks browser POST (verified), so the
-          relay is required — but it's free (Cloudflare Workers) and stateless.
-          To enable: deploy proxy/openai-tts-worker.js, set RELAY_URL in listen.js.
+          Corrected (DR-0016): the browser calls OpenAI directly (no relay) — the
+          earlier 'relay required' was a test-sandbox artifact. BYOK now works on the
+          public site (user enters their key). Pending: confirm Stratum's Listen
+          actually speaks via OpenAI (vs. falling back). If yes, delete the relay.
         benefit: >-
-          Higher-quality, consistent voices for those who opt in with their own key.
-          Nice-to-have — the free browser voice already reads every page.
+          Higher-quality voices for those who opt in with their own key — now with no
+          relay and no owner deploy. The free browser voice still reads every page.
         refs:
           - { label: "DR-0016", url: "/decisions/byok-openai-voices/" }
-          - { label: "DR-0015", url: "/decisions/listen-feature/" }
+          - { label: "REQ-0012", url: "/chairman-log/stratum-byok/" }
 
   - name: "Queued — Phase 2 and beyond"
     blurb: "Sequenced after Phase 1 proof; some need a prioritization decision."

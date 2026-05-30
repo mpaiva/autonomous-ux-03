@@ -2,18 +2,48 @@
 title: "OpenAI voices via BYOK + a stateless relay (CORS-verified)"
 slug: byok-openai-voices
 id_code: "DR-0016"
-status: "Scaffolded — deploy relay to enable"
+status: "Corrected — direct BYOK (relay retained, pending confirmation)"
 status_class: "warn"
 date: 2026-05-29
-owner: "Iris/Sol (build); Chairman (deploy decision)"
-deciders: "Sol, under Chairman directive (REQ-0008)"
+updated: 2026-05-30
+owner: "Iris/Sol (build); Chairman (confirmation)"
+deciders: "Sol, under Chairman directive (REQ-0008); corrected per REQ-0012"
 decision: >-
   Implement OpenAI premium voices as Bring-Your-Own-Key: the user enters their own
-  key, stored only in their browser. Because OpenAI blocks authenticated browser
-  POST (verified), requests pass through a tiny stateless relay that never stores
-  the key. Scaffolded and ready; enabling it is a one-time owner deploy (free tier).
-summary: "BYOK removes the funding problem; a stateless relay is the one unavoidable piece (CORS)."
+  key, stored only in their browser, and the browser calls OpenAI directly. (An
+  earlier version routed through a relay on a mistaken CORS finding — see the
+  correction below. The relay is retained as an optional fallback pending
+  confirmation that the direct call speaks.)
+summary: "BYOK, called directly from the browser. An earlier 'relay required' claim was a test-environment artifact — corrected."
 ---
+
+## Correction (2026-05-30, REQ-0012)
+
+The Chairman pointed to another of his sites (Stratum) that does BYOK OpenAI TTS
+**directly from the browser, with no relay.** That prompted a re-test of the CORS
+claim below — with a proper control this time. The result overturned it:
+
+- A **control preflighted POST to a known CORS-friendly endpoint (httpbin) also
+  failed** with the same "Failed to fetch" in the test browser. So the original
+  failure was the **sandboxed test environment blocking all preflighted cross-origin
+  POSTs**, not OpenAI. My earlier "OpenAI blocks browser POST (verified)" was an
+  artifact — an over-claim, and exactly the failure mode this company exists to avoid.
+
+**What changed:** the client now calls OpenAI **directly** (as Stratum does), so BYOK
+works on the public site with no relay and no owner deploy — the user just enters
+their key. The browser-voice fallback remains, so if any runtime *does* block the
+direct call, it degrades gracefully.
+
+**What is NOT yet claimed:** that the direct call *succeeds* in a real browser. I
+disproved "blocked"; I have not proved "works" (I cannot make a cross-origin POST
+from the test sandbox at all). Pending the Chairman's confirmation that Stratum's
+OpenAI voice actually speaks (vs. silently falling back), the **relay in `proxy/` is
+retained** as an optional fallback. If confirmed, the relay and its docs will be
+removed.
+
+---
+
+## Original record (superseded where it claims a relay is required)
 
 ## Context
 
