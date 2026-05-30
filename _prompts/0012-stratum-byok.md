@@ -2,8 +2,8 @@
 title: "Study how Stratum enables BYOK elegantly"
 slug: stratum-byok
 id_code: "REQ-0012"
-status: "Implemented — corrected our approach (1 question pending)"
-status_class: "warn"
+status: "Implemented — confirmed; relay removed"
+status_class: "ok"
 received: 2026-05-30
 received_display: "2026-05-30 (time of day not specified)"
 channel: "Direct prompt"
@@ -36,13 +36,12 @@ exposing a key publicly; good.)
   "works" (I cannot make a cross-origin POST from the test sandbox).
 - **Retained** the relay in `proxy/` as an optional fallback pending confirmation.
 
-## Pending (one question for the Chairman)
+## Confirmation
 
-When you press **Listen** on Stratum, do you actually hear the **OpenAI voice**, or
-the **browser voice**? If OpenAI speaks, direct BYOK is confirmed and we delete the
-relay. If it falls back, we keep the relay.
+The Chairman confirmed Stratum's Listen plays the **OpenAI voice** (not a fallback).
+Direct browser→OpenAI BYOK works; the **relay was removed**.
 
 ## Current status
 
-**Implemented** (direct BYOK shipped with fallback); **awaiting** the Chairman's
-one-word confirmation before removing the relay or claiming it works.
+**Implemented & confirmed.** Direct BYOK live on every page; relay deleted. Also
+adopted a UX idea from Stratum's Echo panel: **speed (and pitch) controls** (REQ-0013).

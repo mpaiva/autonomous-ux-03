@@ -128,22 +128,6 @@ groups:
         refs:
           - { label: "DR-0012", url: "/decisions/memory-and-dreaming/" }
 
-      - title: "OpenAI voices for Listen (BYOK) — live; confirm direct call speaks"
-        status: "Live — 1 question pending"
-        status_class: "warn"
-        owner: "Chairman (one-word confirmation)"
-        dependencies: >-
-          Corrected (DR-0016): the browser calls OpenAI directly (no relay) — the
-          earlier 'relay required' was a test-sandbox artifact. BYOK now works on the
-          public site (user enters their key). Pending: confirm Stratum's Listen
-          actually speaks via OpenAI (vs. falling back). If yes, delete the relay.
-        benefit: >-
-          Higher-quality voices for those who opt in with their own key — now with no
-          relay and no owner deploy. The free browser voice still reads every page.
-        refs:
-          - { label: "DR-0016", url: "/decisions/byok-openai-voices/" }
-          - { label: "REQ-0012", url: "/chairman-log/stratum-byok/" }
-
   - name: "Queued — Phase 2 and beyond"
     blurb: "Sequenced after Phase 1 proof; some need a prioritization decision."
     items:

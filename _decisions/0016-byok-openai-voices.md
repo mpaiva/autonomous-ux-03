@@ -2,8 +2,8 @@
 title: "OpenAI voices via BYOK + a stateless relay (CORS-verified)"
 slug: byok-openai-voices
 id_code: "DR-0016"
-status: "Corrected — direct BYOK (relay retained, pending confirmation)"
-status_class: "warn"
+status: "Adopted — direct BYOK (confirmed)"
+status_class: "ok"
 date: 2026-05-29
 updated: 2026-05-30
 owner: "Iris/Sol (build); Chairman (confirmation)"
@@ -34,12 +34,15 @@ works on the public site with no relay and no owner deploy — the user just ent
 their key. The browser-voice fallback remains, so if any runtime *does* block the
 direct call, it degrades gracefully.
 
-**What is NOT yet claimed:** that the direct call *succeeds* in a real browser. I
-disproved "blocked"; I have not proved "works" (I cannot make a cross-origin POST
-from the test sandbox at all). Pending the Chairman's confirmation that Stratum's
-OpenAI voice actually speaks (vs. silently falling back), the **relay in `proxy/` is
-retained** as an optional fallback. If confirmed, the relay and its docs will be
-removed.
+**Confirmed (2026-05-30):** the Chairman verified that Stratum's Listen plays the
+**OpenAI voice** (not a silent fallback). Direct browser→OpenAI BYOK works. The
+relay (`proxy/`) has been **removed** — it was unnecessary. The browser-voice
+fallback remains for any runtime that blocks the direct call.
+
+I held the discipline of not replacing one over-claim with its opposite: I shipped
+"direct call + fallback" (safe either way) and only deleted the relay and finalized
+this as confirmed *after* the Chairman's first-hand confirmation — not on my own
+inference.
 
 ---
 

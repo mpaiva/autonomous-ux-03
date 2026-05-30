@@ -2,6 +2,15 @@
 
 All notable changes to the operating record. Newest first.
 
+## 2026-05-30 — Voice speed/pitch controls + direct BYOK confirmed (REQ-0012/0013)
+
+- Chairman confirmed Stratum plays the OpenAI voice → direct browser BYOK works.
+  Removed the relay (deleted proxy/); listen.js calls OpenAI directly; DR-0016
+  finalized as confirmed.
+- Added Speed + Pitch sliders to the Voice modal (Stratum-inspired) with live value
+  readouts, persisted locally. Speed applies to both engines (browser rate / OpenAI
+  speed param); pitch applies to the browser voice. Accessible range inputs.
+
 ## 2026-05-30 — Correction: OpenAI BYOK works directly (no relay) — REQ-0012
 
 - Studied Stratum (Chairman's other site): it does BYOK OpenAI TTS directly from the

@@ -19,15 +19,10 @@
   'use strict';
 
   // ── TTS endpoint ─────────────────────────────────────────────────────────
-  // OpenAI BYOK is called DIRECTLY from the browser (the standard approach, as on
-  // Stratum). An earlier probe suggested OpenAI blocked browser POST, but that was
-  // a sandbox artifact — a control POST to a CORS-friendly endpoint failed the same
-  // way, so the failure was the test environment, not OpenAI. If a specific runtime
-  // ever blocks the direct call, the code falls back to the browser voice; you can
-  // also set RELAY_URL to a stateless relay (see proxy/) as an override.
-  var OPENAI_ENDPOINT = 'https://api.openai.com/v1/audio/speech';
-  var RELAY_URL = '';
-  var TTS_URL = RELAY_URL || OPENAI_ENDPOINT;
+  // OpenAI BYOK is called directly from the browser (confirmed working). The user's
+  // key never leaves their browser except in the request to OpenAI. If a runtime
+  // ever blocks the direct call, the code degrades to the browser voice.
+  var TTS_URL = 'https://api.openai.com/v1/audio/speech';
 
   var OPENAI_VOICES = ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'];
   var OPENAI_MODEL = 'gpt-4o-mini-tts';
@@ -42,11 +37,13 @@
   if (!main) return;
 
   // ── Settings storage ─────────────────────────────────────────────────────
-  var K = { engine: 'penumbra.listen.engine', key: 'penumbra.listen.openaiKey', voice: 'penumbra.listen.voice', remember: 'penumbra.listen.remember' };
+  var K = { engine: 'penumbra.listen.engine', key: 'penumbra.listen.openaiKey', voice: 'penumbra.listen.voice', remember: 'penumbra.listen.remember', rate: 'penumbra.listen.rate', pitch: 'penumbra.listen.pitch' };
   function get(k) { try { return localStorage.getItem(k) || sessionStorage.getItem(k) || ''; } catch (e) { return ''; } }
+  function getNum(k, def) { var v = parseFloat(get(k)); return isNaN(v) ? def : v; }
   function put(k, v, persist) { try { (persist ? localStorage : sessionStorage).setItem(k, v); (persist ? sessionStorage : localStorage).removeItem(k); } catch (e) {} }
   function del(k) { try { sessionStorage.removeItem(k); localStorage.removeItem(k); } catch (e) {} }
   function remembering() { return get(K.remember) === '1'; }
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
 
   // ── Control bar ──────────────────────────────────────────────────────────
   var bar = document.createElement('div');
@@ -94,6 +91,12 @@
     var intro = el('p', 'listen__note');
     intro.textContent = 'The browser voice is free and needs no setup. For higher-quality voices, use your own OpenAI key.';
     d.appendChild(intro);
+
+    // Speed applies to both engines; pitch applies to the browser voice.
+    var rate = slider('listen-rate', 'Speed', 0.5, 2, 0.1, K.rate, true);
+    var pitch = slider('listen-pitch', 'Pitch', 0, 2, 0.1, K.pitch, false);
+    d.appendChild(rate.wrap);
+    d.appendChild(pitch.wrap);
 
     var keyLabel = document.createElement('label'); keyLabel.className = 'listen__label'; keyLabel.setAttribute('for', 'listen-key'); keyLabel.textContent = 'OpenAI API key';
     var keyInput = document.createElement('input'); keyInput.id = 'listen-key'; keyInput.type = 'password'; keyInput.className = 'listen__input';
@@ -144,8 +147,30 @@
       voiceSel.value = get(K.voice) || OPENAI_VOICES[0];
       rem.checked = remembering();
       forget.hidden = !get(K.key);
+      rate.refresh();
+      pitch.refresh();
     };
     return d;
+  }
+
+  function slider(id, labelText, min, max, step, storeKey, isRate) {
+    var wrap = el('div', 'listen__slider');
+    var lab = document.createElement('label'); lab.className = 'listen__label'; lab.setAttribute('for', id);
+    var out = document.createElement('output'); out.className = 'listen__val';
+    function fmt(v) { return isRate ? v.toFixed(1) + '×' : v.toFixed(1); }
+    var val = getNum(storeKey, 1);
+    lab.appendChild(document.createTextNode(labelText + ' '));
+    out.textContent = fmt(val); lab.appendChild(out);
+    var inp = document.createElement('input');
+    inp.type = 'range'; inp.id = id; inp.className = 'listen__range';
+    inp.min = min; inp.max = max; inp.step = step; inp.value = val;
+    inp.setAttribute('aria-valuetext', fmt(val));
+    inp.addEventListener('input', function () {
+      var v = parseFloat(inp.value); out.textContent = fmt(v); inp.setAttribute('aria-valuetext', fmt(v));
+      put(storeKey, String(v), remembering());
+    });
+    wrap.appendChild(lab); wrap.appendChild(inp);
+    return { wrap: wrap, refresh: function () { var v = getNum(storeKey, 1); inp.value = v; out.textContent = fmt(v); inp.setAttribute('aria-valuetext', fmt(v)); } };
   }
 
   var lastFocus = null;
@@ -195,6 +220,8 @@
   function browserNext() {
     if (bidx >= bq.length) { reset('Finished.'); return; }
     var u = new SpeechSynthesisUtterance(bq[bidx]);
+    u.rate = clamp(getNum(K.rate, 1), 0.5, 2);
+    u.pitch = clamp(getNum(K.pitch, 1), 0, 2);
     u.onend = function () { if (state === 'playing' && engineInUse === 'browser') { bidx++; browserNext(); } };
     u.onerror = function () { reset(); };
     synth.speak(u);
@@ -218,7 +245,7 @@
     var key = get(K.key), voice = get(K.voice) || OPENAI_VOICES[0];
     var headers = { 'Content-Type': 'application/json' };
     if (key) headers['Authorization'] = 'Bearer ' + key;
-    return fetch(TTS_URL, { method: 'POST', signal: ai.abort.signal, headers: headers, body: JSON.stringify({ model: OPENAI_MODEL, voice: voice, input: ai.q[i] }) })
+    return fetch(TTS_URL, { method: 'POST', signal: ai.abort.signal, headers: headers, body: JSON.stringify({ model: OPENAI_MODEL, voice: voice, input: ai.q[i], speed: clamp(getNum(K.rate, 1), 0.25, 4) }) })
       .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.blob(); })
       .then(function (b) { var u = URL.createObjectURL(b); ai.urls[i] = u; return u; });
   }
